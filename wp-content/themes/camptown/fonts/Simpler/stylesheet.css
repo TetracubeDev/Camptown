@@ -1,0 +1,48 @@
+@font-face {
+    font-family: 'Simpler';
+    src: url('Simpler-Bold.eot');
+    src: url('Simpler-Bold.eot?#iefix') format('embedded-opentype'),
+        url('Simpler-Bold.woff2') format('woff2'),
+        url('Simpler-Bold.woff') format('woff'),
+        url('Simpler-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Simpler';
+    src: url('Simpler-Black.eot');
+    src: url('Simpler-Black.eot?#iefix') format('embedded-opentype'),
+        url('Simpler-Black.woff2') format('woff2'),
+        url('Simpler-Black.woff') format('woff'),
+        url('Simpler-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Simpler';
+    src: url('Simpler-Light.eot');
+    src: url('Simpler-Light.eot?#iefix') format('embedded-opentype'),
+        url('Simpler-Light.woff2') format('woff2'),
+        url('Simpler-Light.woff') format('woff'),
+        url('Simpler-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Simpler';
+    src: url('Simpler-Regular.eot');
+    src: url('Simpler-Regular.eot?#iefix') format('embedded-opentype'),
+        url('Simpler-Regular.woff2') format('woff2'),
+        url('Simpler-Regular.woff') format('woff'),
+        url('Simpler-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

@@ -1,0 +1,48 @@
+@font-face {
+    font-family: 'Ploni DL 1.1 AAA';
+    src: url('PloniDL11AAA-Medium.eot');
+    src: url('PloniDL11AAA-Medium.eot?#iefix') format('embedded-opentype'),
+        url('PloniDL11AAA-Medium.woff2') format('woff2'),
+        url('PloniDL11AAA-Medium.woff') format('woff'),
+        url('PloniDL11AAA-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ploni DL 1.1 AAA';
+    src: url('PloniDL11AAA-Light.eot');
+    src: url('PloniDL11AAA-Light.eot?#iefix') format('embedded-opentype'),
+        url('PloniDL11AAA-Light.woff2') format('woff2'),
+        url('PloniDL11AAA-Light.woff') format('woff'),
+        url('PloniDL11AAA-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ploni DL 1.1 AAA';
+    src: url('PloniDL11AAA-Bold.eot');
+    src: url('PloniDL11AAA-Bold.eot?#iefix') format('embedded-opentype'),
+        url('PloniDL11AAA-Bold.woff2') format('woff2'),
+        url('PloniDL11AAA-Bold.woff') format('woff'),
+        url('PloniDL11AAA-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ploni DL 1.1 AAA';
+    src: url('PloniDL11AAA-Regular.eot');
+    src: url('PloniDL11AAA-Regular.eot?#iefix') format('embedded-opentype'),
+        url('PloniDL11AAA-Regular.woff2') format('woff2'),
+        url('PloniDL11AAA-Regular.woff') format('woff'),
+        url('PloniDL11AAA-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
