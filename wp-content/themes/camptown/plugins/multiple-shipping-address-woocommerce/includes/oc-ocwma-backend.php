@@ -302,9 +302,7 @@ if (!class_exists('OCWMA_admin_menu')) {
                                         <button class="form_option_edit_admin" data-id="<?php echo esc_attr($user_id); ?>" data-eid-bil="<?php echo esc_attr($row->id); ?>"><?php echo esc_html('edit'); ?></button>
                                         <span class="delete_bill_address"><a href="?user_id=<?php echo esc_attr($user_id); ?>&action=delete_ocma_admin&did=<?php echo esc_attr($row->id); ?>"><?php echo esc_html('Delete'); ?></a></span><br>
                                         <span class="billing_address_inner">
-                                            <?php echo
-                                          
-                                            "<p>" .  esc_html($user_data['reference_field']) . "</p>" .
+                                            <?php echo esc_html($user_data['reference_field']) . "</p>" .
                                                 "<p>" . esc_html($user_data['billing_first_name']) . '&nbsp' . esc_html($user_data['billing_last_name']) . "</p>" .
                                                 "<p>" . esc_html($user_data['billing_company']) . "</p>" .
                                                 "<p>" . esc_html($user_data['billing_address_1']) . "</p>" .

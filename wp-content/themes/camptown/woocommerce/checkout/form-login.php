@@ -62,3 +62,41 @@ if (is_user_logged_in() || 'no' === get_option('woocommerce_enable_checkout_logi
     </div>
 
 </div>
+
+
+<div class="form-group">
+    <p class="form-group__title">לקוחות חדשים? </p>
+    <p class="form-group__subtitle">ניתן להמשיך בתהליך הרכישה כאורח או ליצור חשבון אם תרצו.</p>
+    <div class="form-group__inputs">
+        <input class="newAccFName" type="text" placeholder="* שם פרטי">
+        <input class="newAccLName" type="text" placeholder="* שם משפחה">
+        <input class="newAccLEmail" type="email" placeholder="* כתובת אימייל">
+        <input class="newAccLTel" type="tel" placeholder="* מספר טלפון">
+    </div>
+    <label for="create-user" class="form-group__checkbox">
+        <input type="checkbox" id="create-user">
+        <span>ליצור חשבון לקוח בסיום ההזמנה </span>
+    </label>
+
+
+    <div class="form-group__wide passMask pass-new" >
+        <span class="show-password-input"></span>
+        <input type="password" placeholder="* סיסמה" id="pass-new-1">
+
+        <div class="pass-validation">
+            <strong>על הסיסמה להכיל לפחות:</strong>
+            <ul>
+                <li class="pass-count"><i class="icon-bullet-check"></i>
+                    8 תווים
+                </li>
+                <li class="pass-register"><i class="icon-bullet-check"></i>אות 1 גדולה</li>
+                <li class="pass-num"><i class="icon-bullet-check"></i>מספר </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<div class="text-left">
+    <span class="btn site-color-btn nextAccordion" >המשך</span>
+</div>

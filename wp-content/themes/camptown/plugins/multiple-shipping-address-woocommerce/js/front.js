@@ -78,7 +78,12 @@ jQuery(document).ready(function(){
 
 	jQuery('.ocwma_select_shipping').change(function(){
         var sid = jQuery(this).val();	 
-		shipping_select_ajax(sid);
+
+		if (sid == "default") {	
+			shipping_select_default_ajax(sid);
+		} else {
+			shipping_select_ajax(sid);
+		}
 	});
 
 	jQuery('.choice_address').click(function(){
@@ -398,13 +403,13 @@ function billing_select_default_ajax(sid){
 
 			console.log('sss');
 			
-		  	jQuery('#billing_first_name').val(jQuery('.firstName').html());
-			jQuery('#billing_last_name').val(jQuery('.lastName').html());
-			jQuery('#billing_email').val(jQuery('.email').html());
-			jQuery('#billing_phone').val(jQuery('.phone').html());
-			jQuery('#billing_city').val(jQuery('.city').html());
-			jQuery('#billing_address_1').val(jQuery('.address1').html());
-			jQuery('#billing_address_2').val(jQuery('.address2').html());
+		  	jQuery('#billing_first_name').val(jQuery('.defaultBillingAddesses .firstName').html());
+			jQuery('#billing_last_name').val(jQuery('.defaultBillingAddesses .lastName').html());
+			jQuery('#billing_email').val(jQuery('.defaultBillingAddesses .email').html());
+			jQuery('#billing_phone').val(jQuery('.defaultBillingAddesses .phone').html());
+			jQuery('#billing_city').val(jQuery('.defaultBillingAddesses .city').html());
+			jQuery('#billing_address_1').val(jQuery('.defaultBillingAddesses .address1').html());
+			jQuery('#billing_address_2').val(jQuery('.defaultBillingAddesses .address2').html());
 
 		},
 		error: function() {
@@ -432,6 +437,29 @@ function shipping_select_ajax(sid){
             jQuery("#shipping_state").val(response.shipping_state).change();
             jQuery("#shipping_postcode").val(response.shipping_postcode);
         
+		},
+		error: function() {
+			alert('Error occured');
+		}
+	});
+}
+
+function shipping_select_default_ajax(sid){
+	jQuery.ajax({
+		url: OCWMAscript.ajax_url,
+		dataType: 'json',
+		type:'POST',
+		data:'action=productscommentsshipping_select&sid='+sid,
+		success : function(response) {
+			
+		  	jQuery('#shipping_first_name').val(jQuery('.defaultShippingAddesses .firstName').html());
+			jQuery('#shipping_last_name').val(jQuery('.defaultShippingAddesses .lastName').html());
+			jQuery('#shipping_email').val(jQuery('.defaultShippingAddesses .email').html());
+			jQuery('#shipping_phone').val(jQuery('.defaultShippingAddesses .phone').html());
+			jQuery('#shipping_city').val(jQuery('.defaultShippingAddesses .city').html());
+			jQuery('#shipping_address_1').val(jQuery('.defaultShippingAddesses .address1').html());
+			jQuery('#shipping_address_2').val(jQuery('.defaultShippingAddesses .address2').html());
+
 		},
 		error: function() {
 			alert('Error occured');

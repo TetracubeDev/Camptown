@@ -44,7 +44,7 @@ if (!class_exists('OCWMA_front')) {
     {
       foreach ($items as $key => $value) {
         if ('edit-address' === $key) {
-          $items[$key] = __('Address Book', 'woo-address-book');
+          $items[$key] = __(' אזור אישי  ', 'woo-address-book');
         }
       }
       return $items;
@@ -71,7 +71,7 @@ if (!class_exists('OCWMA_front')) {
       ?>
         <div id="address_selection_popup_main" class="address_selection_popup_main">
           <div class="billing_popup_header">
-            <h3><?php echo esc_html_e('Choice Billing Address', 'multiple-shipping-address-woocommerce'); ?></h3>
+            <h3 class="account__title"><?php echo esc_html_e('Choice Billing Address', 'multiple-shipping-address-woocommerce'); ?></h3>
           </div>
           <div class="address_selection_popup_inner">
             <span class="ocwma_close_choice_section"><?php echo esc_html_e('×', 'multiple-shipping-address-woocommerce'); ?></span>
@@ -115,7 +115,7 @@ if (!class_exists('OCWMA_front')) {
       ?>
         <div id="shipping_address_selection_popup_main" class="shipping_address_selection_popup_main">
           <div class="shipping_popup_header">
-            <h3><?php echo esc_html('Choice Billing Address'); ?></h3>
+            <h3 class="account__title"><?php echo esc_html('Choice Billing Address'); ?></h3>
           </div>
           <div class="shipping_address_selection_popup_inner">
             <span class="shipping_ocwma_close_choice_section">×</span>
@@ -179,11 +179,13 @@ if (!class_exists('OCWMA_front')) {
             }
         ?>
             <div class="billing_address">
+              <div class="address-title">
+                כתובת חיוב
 
+              </div>
               <div class="billing_address_inner">
-                tjkty
                 <?php echo
- "<p>" . esc_html($user_data['reference_field']) . "</p>" .
+
 
                 "<p>" . esc_html($user_data['reference_field']) . "</p>" .
                   "<p>" . esc_html($user_data['billing_first_name']) . '&nbsp' . esc_html($user_data['billing_last_name']) . "</p>" .
@@ -195,17 +197,42 @@ if (!class_exists('OCWMA_front')) {
                 ?>
               </div>
               <div class="address__buttons">
-                <button class="defalut_address <?php echo esc_attr($checked); ?>" data-value="<?php echo esc_attr($defalt_addd); ?>" data-add_id="<?php echo esc_attr($row->id); ?>" data-type="billing"><?php echo esc_attr('DefalutAddress'); ?></button><button class="form_option_edit" data-id="<?php echo esc_attr($user_id); ?>" data-eid-bil="<?php echo esc_attr($row->id); ?>"><?php echo esc_html('edit'); ?></button>
-                <span class="delete_bill_address"><a href="?action=delete_ocma&did=<?php echo esc_attr($row->id); ?>"><?php echo esc_html('Delete'); ?></a></span>
+                <button class="defalut_address <?php echo esc_attr($checked); ?>" data-value="<?php echo esc_attr($defalt_addd); ?>" data-add_id="<?php echo esc_attr($row->id); ?>" data-type="billing"><?php echo esc_attr('DefalutAddress'); ?></button><button class="form_option_edit" data-id="<?php echo esc_attr($user_id); ?>" data-eid-bil="<?php echo esc_attr($row->id); ?>"> ערוך  </button>
+                <span class="delete_bill_address">
+                  <a href="#" class="del-address">  מחק  </a>
+                  <div class="modal logout-modal"  >
+
+
+                    <div class="modal__inner ">
+                      <div class="modal__close  modal-close-btn">
+                        <i class="icon-close-thin"></i>
+                      </div>
+                      <div class="modal__title">
+                      האם אתה בטוח שברצונך למחוק כתובת זו?
+
+
+                      </div>
+                      <div class="modal__buttons logout-buttons">
+                        <a href="?action=delete_ocma&did=<?php echo esc_attr($row->id); ?>">כן</a>
+                        <div class=" dont-logout  modal-close-btn">
+                          בטל
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+
+                </span>
               </div>
             </div>
           <?php
           }
         } else {
           ?>
-          <div class="billing_address_empty">
+          <!-- <div class="billing_address_empty">
             <p class="billing_empty_message">You have no billing addresses.</p>
-          </div>
+          </div> -->
           <?php
         }
         echo '</div>';
@@ -226,7 +253,11 @@ if (!class_exists('OCWMA_front')) {
             $user_data = unserialize($userdata_ship);
           ?>
             <div class="shipping_address">
-
+              <div class="address-title">
+                <div class="address-title">
+                כתובת משלוח
+                </div>
+              </div>
               <div class="shipping_address_inner">
                 <?php echo
                 "<p>" . esc_html($user_data['reference_field']) . "</p>" .
@@ -239,8 +270,8 @@ if (!class_exists('OCWMA_front')) {
                 ?>
               </div>
               <div class="address__buttons">
-                <button class="defalt_addd_shipping <?php echo esc_attr($checked); ?>" data-value="<?php echo esc_attr($defalt_addd); ?>" data-add_id="<?php echo esc_attr($row->id); ?>" data-type="shipping"><?php echo esc_html('DefalutAddress'); ?></button><button class="form_option_ship_edit" data-id="<?php echo esc_attr($user_id); ?>" data-eid-ship="<?php echo esc_attr($row->id); ?>"><?php echo esc_html('edit'); ?></button>
-                <span class="delete_ship_address"><a href="?action=delete-ship&did-ship=<?php echo esc_attr($row->id); ?>"><?php echo esc_html('Delete'); ?></a></span>
+                <button class="defalt_addd_shipping <?php echo esc_attr($checked); ?>" data-value="<?php echo esc_attr($defalt_addd); ?>" data-add_id="<?php echo esc_attr($row->id); ?>" data-type="shipping"><?php echo esc_html('DefalutAddress'); ?></button><button class="form_option_ship_edit" data-id="<?php echo esc_attr($user_id); ?>" data-eid-ship="<?php echo esc_attr($row->id); ?>">  ערוך  </button>
+                <span class="delete_ship_address"><a href="?action=delete-ship&did-ship=<?php echo esc_attr($row->id); ?>">  מחק </a></span>
               </div>
             </div>
 
@@ -263,14 +294,14 @@ if (!class_exists('OCWMA_front')) {
         if ($ocwma_comman['ocwma_enable_multiple_billing_adress'] == 'yes') {
         ?>
           <div class="billling-button">
-            <button class="form_option_billing" data-id="<?php echo esc_attr($user_id); ?>" style="background-color: <?php echo esc_attr($ocwma_comman['ocwma_btn_bg_clr']); ?>; color: <?php echo esc_attr($ocwma_comman['ocwma_font_clr']); ?>; padding: <?php echo esc_attr($ocwma_comman['ocwma_btn_padding']); ?>; font-size: <?php echo "15px" ?>;">Add Billing Address</button>
+            <button class="form_option_billing" data-id="<?php echo esc_attr($user_id); ?>"> הוסף כתובת  </button>
           </div>
         <?php
         }
         if ($ocwma_comman['ocwma_enable_multiple_shipping_adress'] == 'yes') {
         ?>
           <div class="shipping-button">
-            <button class="form_option_shipping" data-id="<?php echo esc_attr($user_id); ?>" style="background-color: <?php echo esc_attr($ocwma_comman['ocwma_btn_bg_clr']); ?>; color: <?php echo esc_attr($ocwma_comman['ocwma_font_clr']); ?>; padding: <?php echo esc_attr($ocwma_comman['ocwma_btn_padding']); ?>; font-size: <?php echo "15px" ?>;">Add Shipping Address</button>
+            <button class="form_option_shipping" data-id="<?php echo esc_attr($user_id); ?>">  הוסף כתובת </button>
           </div>
         <?php
         }
@@ -330,7 +361,7 @@ if (!class_exists('OCWMA_front')) {
                 ?>
               </div>
               <p>
-                <button type="submit" name="add_billing" id="oc_add_billing_form_submit" class="button" value="ocwma_billpp_save_option"><?php echo esc_html('Save Address'); ?></button>
+                <button type="submit" name="add_billing" id="oc_add_billing_form_submit" class="button" value="ocwma_billpp_save_option">    שמור כתובת   </button>
               </p>
             </div>
           </form>
@@ -352,6 +383,9 @@ if (!class_exists('OCWMA_front')) {
           $user_data = unserialize($user[0]->userdata);
           $address_fields = wc()->countries->get_address_fields(get_user_meta(get_current_user_id(), 'billing_country', true));
           ?>
+          <div class="ocwma_modal-title bordered-title text-center">
+            <span>כתובת </span>
+          </div>
           <form method="post" id="oc_edit_billing_form">
             <div class="ocwma_woocommerce-address-fields">
               <div class="ocwma_woocommerce-address-fields_field-wrapper">
@@ -374,7 +408,7 @@ if (!class_exists('OCWMA_front')) {
                 ?>
               </div>
               <p>
-                <button type="submit" name="add_billing_edit" id="oc_edit_billing_form_submit" class="button" value="ocwma_billpp_save_option"><?php echo esc_html('Update Address'); ?></button>
+                <button type="submit" name="add_billing_edit" id="oc_edit_billing_form_submit" class="button" value="ocwma_billpp_save_option">  שמור כתובת </button>
               </p>
             </div>
           </form>
@@ -443,7 +477,7 @@ if (!class_exists('OCWMA_front')) {
                 ?>
               </div>
               <p>
-                <button type="submit" name="add_shipping" id="oc_add_shipping_form_submit" class="button" value="ocwma_shippp_save_optionn"><?php echo esc_html('Save Address'); ?></button>
+                <button type="submit" name="add_shipping" id="oc_add_shipping_form_submit" class="button" value="ocwma_shippp_save_optionn">    שמור כתובת   </button>
               </p>
             </div>
           </form>
@@ -488,7 +522,7 @@ if (!class_exists('OCWMA_front')) {
               ?>
             </div>
             <p>
-              <button type="submit" name="add_shipping_edit" class="button" id="oc_edit_shipping_form_submit" value="ocwma_shippp_save_optionn"><?php echo esc_html('Update Address'); ?></button>
+              <button type="submit" name="add_shipping_edit" class="button" id="oc_edit_shipping_form_submit" value="ocwma_shippp_save_optionn">  שמור כתובת </button>
             </p>
           </div>
         </form>
@@ -542,7 +576,7 @@ if (!class_exists('OCWMA_front')) {
           if ($ocwma_comman['ocwma_select_address_type'] == 'Dropdown') {
         ?>
             <select class="ocwma_select">
-              <option>...Choose address...</option>
+              <option value="default">Default Address</option>
               <?php
               // $user = $wpdb->get_results( "SELECT * FROM {$tablename} WHERE type='billing' AND userid=".sanitize_text_field($user_id));
               $user = $this->ocwma_Query_get($tablename, 'billing', $user_id);
@@ -555,7 +589,7 @@ if (!class_exists('OCWMA_front')) {
                 } else {
                   $valid =  "";
                 } ?>
-                <option value="<?php echo esc_attr($row->id); ?>" <?php echo  esc_attr($valid); ?>> <?php echo esc_attr($user_data['reference_field']) ?></option>
+                <option value="<?php echo esc_attr($row->id); ?>" <?php echo  esc_attr($valid); ?>> <?php echo esc_attr($user_data['billing_city']) ?>, <?php echo esc_attr($user_data['billing_address_1']) ?> <?php echo esc_attr($user_data['billing_address_2']) ?></option>
               <?php } ?>
             </select>
             <?php
@@ -572,7 +606,7 @@ if (!class_exists('OCWMA_front')) {
             }
           }
           ?>
-          <button class="form_option_billing" data-id="<?php echo esc_attr($user_id); ?>" style="background-color: <?php echo esc_attr($ocwma_comman['ocwma_btn_bg_clr']); ?>; color: <?php echo esc_attr($ocwma_comman['ocwma_font_clr']); ?>; padding: <?php echo esc_attr($ocwma_comman['ocwma_btn_padding']); ?>; font-size: <?php echo esc_html("15px"); ?> ?>;"><?php echo esc_html('Add Billing Address'); ?></button>
+          <button class="form_option_billing" data-id="<?php echo esc_attr($user_id); ?>" style="background-color: <?php echo esc_attr($ocwma_comman['ocwma_btn_bg_clr']); ?>; color: <?php echo esc_attr($ocwma_comman['ocwma_font_clr']); ?>; padding: <?php echo esc_attr($ocwma_comman['ocwma_btn_padding']); ?>; font-size: <?php echo esc_html("15px"); ?> ?>;"> הוסף כתובת  </button>
           <?php
         }
       }
@@ -589,7 +623,7 @@ if (!class_exists('OCWMA_front')) {
           if ($ocwma_comman['ocwma_select_shipping_address_type'] == 'Dropdown') {
           ?>
             <select class="ocwma_select_shipping">
-              <option>...Choose address...</option>
+              <option value="default">Default Address</option>
               <?php
               //   $user = $wpdb->get_results( "SELECT * FROM {$tablename} WHERE type='shipping' AND userid=".sanitize_text_field($user_id));
               $user = $this->ocwma_Query_get($tablename, 'shipping', $user_id);
@@ -602,7 +636,7 @@ if (!class_exists('OCWMA_front')) {
                 $userdata_bil = $row->userdata;
                 $user_data = unserialize($userdata_bil);
 
-              ?> <option value="<?php echo esc_attr($row->id); ?>" <?php echo esc_attr($valid); ?>> <?php echo esc_html($user_data['reference_field']); ?></option><?php }
+              ?> <option value="<?php echo esc_attr($row->id); ?>" <?php echo esc_attr($valid); ?>> <?php echo esc_attr($user_data['shipping_city']) ?>, <?php echo esc_attr($user_data['shipping_address_1']) ?> <?php echo esc_attr($user_data['shipping_address_2']) ?><?php }
                                                                                                                                                                     ?>
             </select>
             <?php
