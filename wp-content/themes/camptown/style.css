@@ -10464,6 +10464,10 @@ table {
     padding-bottom: 107px;
 }
 
+.woocommerce-checkout .woocommerce-NoticeGroup {
+    margin-bottom: 15px;
+}
+
 .wc_title {
     font-size: 2.625rem;
     font-weight: bold;
@@ -11245,6 +11249,7 @@ table {
 .checkout-custom-login {
     display: flex;
     padding-bottom: 35px;
+    margin-bottom: 25px;
 }
 
 .checkout-interactive-form .woocommerce-form-login {
@@ -11448,6 +11453,46 @@ select.ocwma_select_shipping {
     display: none !important;
 }
 
+
+
+.form-group__title {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 5px;
+}
+.form-group__subtitle {
+    margin-bottom: 13px;
+}
+.form-group__inputs {
+    display: flex;
+    justify-content: space-between;
+}
+.form-group__inputs input {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: calc(25% - 20px);
+    margin-bottom: 23px;
+}
+@media (max-width: 767px) {
+    .form-group__title {
+        font-size: 18px;
+        margin-bottom: 14px;
+    }
+}
+
+.form-group__wide {
+    margin-bottom: 15px;
+}
+
+.passMask {
+    display: none;
+}
+
+
+
+
 .wc_payment_method {
     position: relative;
     margin-bottom: 20px;
@@ -11517,7 +11562,7 @@ select.ocwma_select_shipping {
     display: none;
 }
 
-.custom-shipping-methods__btn {
+.custom-shipping-methods__btn, .nextAccordion {
     margin-top: 0;
     padding: 0 44px;
     cursor: pointer;
@@ -11624,7 +11669,7 @@ display: none;
     .custom-shipping-methods+.text-left {
         text-align: center;
     }
-    .custom-shipping-methods__btn {
+    .custom-shipping-methods__btn, .nextAccordion {
         margin-left: 0;
     }
     .woocommerce-checkout .toggless__content .text-left {
@@ -11962,4 +12007,8 @@ section .woocommerce-form-register:not(.active) {
 .wishlist-pagination div * {
     display: inline-block;
     padding: 5px;
+}
+
+#account_password{
+    display: none!important;
 }

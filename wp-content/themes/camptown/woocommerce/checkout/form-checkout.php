@@ -234,7 +234,7 @@ $customer = new WC_Customer($user_id);
 			</div>
 
 			<form name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url(wc_get_checkout_url()); ?>" enctype="multipart/form-data">
-				<div class="toggless">
+				<div class="toggless delivery-block">
 					<div class="toggless__item">
 						<div class="toggless__title">
 							<div class="toggless__icon default-icon">
@@ -457,7 +457,36 @@ $customer = new WC_Customer($user_id);
 
 
 
+
+		$('.newAccFName').on('input', function() {
+            let val = $(this).val()
+            $('#billing_first_name').val(val)
+        })
+		$('.newAccLName').on('input', function() {
+            let val = $(this).val()
+            $('#billing_last_name').val(val)
+        })
+		$('.newAccLEmail').on('input', function() {
+            let val = $(this).val()
+            $('#billing_email').val(val)
+        })
+		$('.newAccFName').on('input', function() {
+            let val = $(this).val()
+            $('#billing_phone').val(val)
+        })
 		
+
+		$("#create-user").change(function() {
+			if(this.checked) {
+				$( "#createaccount" ).prop( "checked", true );
+				$( ".passMask" ).slideDown(300);
+				$( ".create-account" ).slideDown(300);
+			} else {
+				$( "#createaccount" ).prop( "checked", false );
+				$( ".passMask" ).slideUp(300);
+				$( ".create-account" ).slideUp(300);
+			}
+		});
 
 
 
