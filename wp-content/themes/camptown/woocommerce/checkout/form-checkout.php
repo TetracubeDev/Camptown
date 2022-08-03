@@ -456,6 +456,13 @@ $customer = new WC_Customer($user_id);
 		});
 
 
+		$('form.checkout.woocommerce-checkout').bind('DOMSubtreeModified',function(){
+			if ($('ul.woocommerce-error').length) {
+			    $('ul.woocommerce-error').insertAfter('.interactive-form__step')//where you want to place it
+			}
+		});
+
+
 
 
 		$('.newAccFName').on('input', function() {
@@ -470,7 +477,7 @@ $customer = new WC_Customer($user_id);
             let val = $(this).val()
             $('#billing_email').val(val)
         })
-		$('.newAccFName').on('input', function() {
+		$('.newAccLTel').on('input', function() {
             let val = $(this).val()
             $('#billing_phone').val(val)
         })

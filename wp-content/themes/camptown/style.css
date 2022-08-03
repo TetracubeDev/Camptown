@@ -12009,6 +12009,6 @@ section .woocommerce-form-register:not(.active) {
     padding: 5px;
 }
 
-#account_password{
+#account_password, #account_password+span{
     display: none!important;
 }
