@@ -1392,8 +1392,8 @@ function refreshNiceSelect(element) {
 /* checkout check inputs */
 
 function is_valid_check_custom_shipping_methods__inputs_3() {
-    let billings_inputs = document.querySelectorAll('.checkout .woocommerce-billing-fields .validate-required .input-text ');
-    let shipping_inputs = document.querySelectorAll('.checkout .woocommerce-shipping-fields .validate-required .input-text ');
+    let billings_inputs = document.querySelectorAll('.checkout .woocommerce-billing-fields .validate-required .input-text, .checkout .woocommerce-billing-fields .validate-required select ');
+    let shipping_inputs = document.querySelectorAll('.checkout .woocommerce-shipping-fields .validate-required .input-text, .checkout .woocommerce-shipping-fields .validate-required select ');
     let btn = document.querySelector('#custom-shipping-methods__btn_3');
     let ship_to_different_address_input = document.querySelector('[name=ship_to_different_address]');
 
@@ -1411,6 +1411,18 @@ function is_valid_check_custom_shipping_methods__inputs_3() {
         }
 
         for (const input of inputs) {
+            if (input.tagName==='SELECT') {
+                if (input.value==='שם ישוב') {
+                    is_ok = false
+                    input.closest('.validate-required')?.querySelector('.select2-selection')?.classList.add('error')
+                    input.classList.add('error')
+                   
+                }else{
+                    input.closest('.validate-required')?.querySelector('.select2-selection')?.classList.remove('error')  
+                    input.classList.remove('error')
+                }
+               continue
+            }
             if (input.value === '') {
                 is_ok = false
                 input.classList.add('error')

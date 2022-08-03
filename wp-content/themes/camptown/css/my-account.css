@@ -1143,10 +1143,6 @@ form.edit-account .show-password-input {
     bottom: auto !important;
 }
 
-.billing_empty_message {
-    display: none;
-}
-
 .account__subtitle {
     font-size: 16px;
     line-height: 1.5;

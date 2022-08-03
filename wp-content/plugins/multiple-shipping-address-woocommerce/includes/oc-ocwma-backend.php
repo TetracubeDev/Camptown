@@ -302,11 +302,12 @@ if (!class_exists('OCWMA_admin_menu')) {
                                         <button class="form_option_edit_admin" data-id="<?php echo esc_attr($user_id); ?>" data-eid-bil="<?php echo esc_attr($row->id); ?>"><?php echo esc_html('edit'); ?></button>
                                         <span class="delete_bill_address"><a href="?user_id=<?php echo esc_attr($user_id); ?>&action=delete_ocma_admin&did=<?php echo esc_attr($row->id); ?>"><?php echo esc_html('Delete'); ?></a></span><br>
                                         <span class="billing_address_inner">
-                                            <?php echo esc_html($user_data['reference_field']) . "</p>" .
+                                            <?php echo 
                                                 "<p>" . esc_html($user_data['billing_first_name']) . '&nbsp' . esc_html($user_data['billing_last_name']) . "</p>" .
                                                 "<p>" . esc_html($user_data['billing_company']) . "</p>" .
                                                 "<p>" . esc_html($user_data['billing_address_1']) . "</p>" .
                                                 "<p>" . esc_html($user_data['billing_address_2']) . "</p>" .
+                                                "<p>" . esc_html($user_data['billing_address_3']) . "</p>" .
                                                 "<p>" . esc_html($user_data['billing_city']) . " " . esc_html($user_data['billing_postcode']) . "</p>" .
                                                 "<p>" . esc_html($user_data['billing_state']) . ', ' . esc_html($user_data['billing_country']) . "</p>";
                                             ?>
@@ -339,11 +340,12 @@ if (!class_exists('OCWMA_admin_menu')) {
                                         <span class="shipping_address_inner">
                                             <?php echo 
                                             
-                                            "<p>" . esc_html($user_data['reference_field']) . "</p>" .
+                                           
                                             "<p>" .   esc_html($user_data['shipping_first_name']) . '&nbsp' . esc_htmlesc_html($user_data['shipping_last_name']) . "</p>" .
                                             "<p>" .   esc_html($user_data['shipping_company']) . "</p>" .
                                             "<p>" .   esc_html($user_data['shipping_address_1']) . "</p>" .
                                             "<p>" .  esc_html($user_data['shipping_address_2']) . "</p>" .
+                                            "<p>" .  esc_html($user_data['shipping_address_3']) . "</p>" .
                                             "<p>" . esc_html($user_data['shipping_city']) . " " . esc_html($user_data['shipping_postcode']) . "</p>" .
                                             "<p>" . esc_html($user_data['shipping_state']) . ', ' . esc_html($user_data['shipping_country']) . "</p>";
                                             ?>
@@ -403,15 +405,7 @@ if (!class_exists('OCWMA_admin_menu')) {
                             <input type="hidden" name="userid" value="<?php echo esc_attr($user_id, 'multiple-shipping-address-woocommerce'); ?>">
                             <input type="hidden" name="edit_id" value="<?php echo  esc_attr($edit_id, 'multiple-shipping-address-woocommerce'); ?>">
                             <input type="hidden" name="type" value="billing">
-                            <p class="form-row form-row-wide" id="reference_field" data-priority="30">
-                                <label for="reference_field" class="">
-                                    <b><?php echo esc_html_e('Reference Name:', 'multiple-shipping-address-woocommerce'); ?></b>
-                                    <abbr class="required" title="required">*</abbr>
-                                </label>
-                                <span class="woocommerce-input-wrapper">
-                                    <input type="text" class="input-text" id="oc_refname" name="reference_field" value="<?php echo esc_attr($user_data['reference_field']); ?>">
-                                </span>
-                            </p>
+                            
                             <?php
                             foreach ($address_fields as $key => $field) {
                                 woocommerce_form_field($key, $field, $user_data[$key]);
@@ -449,11 +443,7 @@ if (!class_exists('OCWMA_admin_menu')) {
             $billing_data = array();
             $field_errors = array();
 
-            $billing_data['reference_field'] = sanitize_text_field($_REQUEST['reference_field']);
-
-            if ($_REQUEST['reference_field'] == '') {
-                $field_errors['oc_refname'] = '1';
-            }
+           
 
             foreach ($address_fields as $key => $field) {
                 $billing_data[$key] = sanitize_text_field($_REQUEST[$key]);
@@ -522,15 +512,7 @@ if (!class_exists('OCWMA_admin_menu')) {
                         <input type="hidden" name="type" value="shipping">
                         <input type="hidden" name="userid" value="<?php echo esc_attr($user_id); ?>">
                         <input type="hidden" name="edit_id" value="<?php echo esc_attr($edit_id); ?>">
-                        <p class="form-row form-row-wide" id="reference_field" data-priority="30">
-                            <label for="reference_field" class="">
-                                <b><?php echo esc_html('Reference Name:'); ?></b>
-                                <abbr class="required" title="required">*</abbr>
-                            </label>
-                            <span class="woocommerce-input-wrapper">
-                                <input type="text" class="input-text" id="oc_refname" name="reference_field" value="<?php echo esc_attr($user_data['reference_field']); ?>">
-                            </span>
-                        </p>
+                        
                         <?php
                         foreach ($address_fields as $key => $field) {
                             woocommerce_form_field($key, $field, $user_data[$key]);
@@ -564,11 +546,7 @@ if (!class_exists('OCWMA_admin_menu')) {
             $billing_data = array();
             $field_errors = array();
 
-            $billing_data['reference_field'] = sanitize_text_field($_REQUEST['reference_field']);
-
-            if ($_REQUEST['reference_field'] == '') {
-                $field_errors['oc_refname'] = '1';
-            }
+            
 
             foreach ($address_fields as $key => $field) {
                 $billing_data[$key] = sanitize_text_field($_REQUEST[$key]);
