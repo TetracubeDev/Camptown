@@ -81,18 +81,16 @@ if (!class_exists('OCWMA_front')) {
 
                 $userdata_bil = $row->userdata;
                 $user_data = unserialize($userdata_bil);
-                /*echo "<pre>";
-                        print($user_data['reference_field']);
-                        echo "</pre>";*/
+                
               ?>
                 <div class="address_line">
                   <div class="address_line_inner">
-                    <h5><?php echo esc_html($user_data['reference_field']); ?></h5>
                     <ul>
                       <li><?php echo esc_html($user_data['billing_first_name']) . '&nbsp' . esc_html($user_data['billing_last_name']); ?></li>
                       <li><?php echo esc_html($user_data['billing_company']); ?></li>
-                      <li><?php echo esc_html($user_data['billing_address_1']); ?></li>
+                      <li><?php echo esc_html($user_data['billingocwma_table_bill']); ?></li>
                       <li><?php echo esc_html($user_data['billing_address_2']); ?></li>
+                      <li><?php echo esc_html($user_data['billing_address_3']); ?></li>
                       <li><?php echo esc_html($user_data['billing_city']) . '&nbsp' . esc_html($user_data['billing_postcode']); ?></li>
                       <li><?php echo esc_html($user_data['billing_state']) . ', ' . esc_html($user_data['billing_country']); ?></li>
                     </ul>
@@ -129,12 +127,12 @@ if (!class_exists('OCWMA_front')) {
               ?>
                 <div class="shipping_address_line">
                   <div class="shipping_address_line_inner">
-                    <h5><?php echo esc_html($user_data['reference_field']); ?></h5>
                     <ul>
                       <li><?php echo esc_html($user_data['shipping_first_name']) . '&nbsp' . esc_html($user_data['shipping_last_name']); ?></li>
                       <li><?php echo esc_html($user_data['shipping_company']); ?></li>
                       <li><?php echo esc_html($user_data['shipping_address_1']); ?></li>
                       <li><?php echo esc_html($user_data['shipping_address_2']); ?></li>
+                      <li><?php echo esc_html($user_data['shipping_address_3']); ?></li>
                       <li><?php echo esc_html($user_data['shipping_city']) . '&nbsp' . esc_html($user_data['shipping_postcode']); ?></li>
                       <li><?php echo esc_html($user_data['shipping_state']) . ', ' . esc_html($user_data['shipping_country']); ?></li>
                     </ul>
@@ -187,11 +185,11 @@ if (!class_exists('OCWMA_front')) {
                 <?php echo
 
 
-                "<p>" . esc_html($user_data['reference_field']) . "</p>" .
                   "<p>" . esc_html($user_data['billing_first_name']) . '&nbsp' . esc_html($user_data['billing_last_name']) . "</p>" .
                   "<p>" . esc_html($user_data['billing_company']) . "</p>" .
                   "<p>" . esc_html($user_data['billing_address_1']) . "</p>" .
                   "<p>" . esc_html($user_data['billing_address_2']) . "</p>" .
+                  "<p>" . esc_html($user_data['billing_address_3']) . "</p>" .
                   "<p>" . esc_html($user_data['billing_city']) . " " . esc_html($user_data['billing_postcode']) . "</p>" .
                   "<p>" . esc_html($user_data['billing_state']) .  esc_html($user_data['billing_country']) . "</p>";
                 ?>
@@ -230,9 +228,9 @@ if (!class_exists('OCWMA_front')) {
           }
         } else {
           ?>
-          <!-- <div class="billing_address_empty">
-            <p class="billing_empty_message">You have no billing addresses.</p>
-          </div> -->
+          <div class="billing_address_empty">
+            <p class="billing_empty_message">אין לך כתובות חיוב.</p>
+          </div>
           <?php
         }
         echo '</div>';
@@ -260,11 +258,11 @@ if (!class_exists('OCWMA_front')) {
               </div>
               <div class="shipping_address_inner">
                 <?php echo
-                "<p>" . esc_html($user_data['reference_field']) . "</p>" .
                   "<p>" . esc_html($user_data['shipping_first_name']) . '&nbsp' . esc_html($user_data['shipping_last_name']) . "</p>" .
                   "<p>" .  esc_html($user_data['shipping_company']) . "</p>" .
                   "<p>" .  esc_html($user_data['shipping_address_1']) . "</p>" .
                   "<p>" . esc_html($user_data['shipping_address_2']) . "</p>" .
+                  "<p>" . esc_html($user_data['shipping_address_3']) . "</p>" .
                   "<p>" . esc_html($user_data['shipping_city']) . " " . esc_html($user_data['shipping_postcode']) . "</p>" .
                   "<p>" . esc_html($user_data['shipping_state']) . ', ' . esc_html($user_data['shipping_country']) . "</p>";
                 ?>
@@ -280,7 +278,7 @@ if (!class_exists('OCWMA_front')) {
         } else {
           ?>
           <div class="shipping_address_empty">
-            <p class="shipping_empty_message">You have no shipping addresses.</p>
+            <p class="shipping_empty_message">אין לך כתובות למשלוח.</p>
           </div>
       <?php
         }
@@ -345,15 +343,7 @@ if (!class_exists('OCWMA_front')) {
             <div class="ocwma_woocommerce-address-fields">
               <div class="ocwma_woocommerce-address-fields_field-wrapper">
                 <input type="hidden" name="type" value="billing">
-                <p class="form-row form-row-wide" id="reference_field" data-priority="30">
-                  <label for="reference_field" class="">
-                    <b><?php echo esc_html('Reference Name:'); ?></b>
-                    <abbr class="required" title="required">*</abbr>
-                  </label>
-                  <span class="woocommerce-input-wrapper">
-                    <input type="text" class="input-text" name="reference_field" id="oc_refname">
-                  </span>
-                </p>
+               
                 <?php
                 foreach ($address_fields as $key => $field) {
                   woocommerce_form_field($key, $field, wc_get_post_data_by_key($key));
@@ -392,15 +382,7 @@ if (!class_exists('OCWMA_front')) {
                 <input type="hidden" name="userid" value="<?php echo esc_attr($user_id); ?>">
                 <input type="hidden" name="edit_id" value="<?php echo  esc_attr($edit_id); ?>">
                 <input type="hidden" name="type" value="billing">
-                <p class="form-row form-row-wide" id="reference_field" data-priority="30">
-                  <label for="reference_field" class="">
-                    <b><?php echo esc_html('Reference Name:'); ?></b>
-                    <abbr class="required" title="required">*</abbr>
-                  </label>
-                  <span class="woocommerce-input-wrapper">
-                    <input type="text" class="input-text" id="oc_refname" name="reference_field" value="<?php echo esc_attr($user_data['reference_field']); ?>">
-                  </span>
-                </p>
+                
                 <?php
                 foreach ($address_fields as $key => $field) {
                   woocommerce_form_field($key, $field, $user_data[$key]);
@@ -461,15 +443,7 @@ if (!class_exists('OCWMA_front')) {
             <div class="ocwma_woocommerce-address-fields">
               <div class="ocwma_woocommerce-address-fields_field-wrapper">
                 <input type="hidden" name="type" value="shipping">
-                <p class="form-row form-row-wide" id="reference_field" data-priority="30">
-                  <label for="reference_field" class="">
-                    <b><?php echo esc_html('Reference Name:'); ?></b>
-                    <abbr class="required" title="required">*</abbr>
-                  </label>
-                  <span class="woocommerce-input-wrapper">
-                    <input type="text" class="input-text" id="oc_refname" name="reference_field">
-                  </span>
-                </p>
+                
                 <?php
                 foreach ($address_fields as $key => $field) {
                   woocommerce_form_field($key, $field, wc_get_post_data_by_key($key));
@@ -506,15 +480,7 @@ if (!class_exists('OCWMA_front')) {
               <input type="hidden" name="type" value="shipping">
               <input type="hidden" name="userid" value="<?php echo esc_attr($user_id); ?>">
               <input type="hidden" name="edit_id" value="<?php echo esc_attr($edit_id); ?>">
-              <p class="form-row form-row-wide" id="reference_field" data-priority="30">
-                <label for="reference_field" class="">
-                  <b><?php echo esc_html('Reference Name:'); ?></b>
-                  <abbr class="required" title="required">*</abbr>
-                </label>
-                <span class="woocommerce-input-wrapper">
-                  <input type="text" class="input-text" id="oc_refname" name="reference_field" value="<?php echo esc_attr($user_data['reference_field']); ?>">
-                </span>
-              </p>
+              
               <?php
               foreach ($address_fields as $key => $field) {
                 woocommerce_form_field($key, $field, $user_data[$key]);
@@ -697,11 +663,7 @@ if (!class_exists('OCWMA_front')) {
       $billing_data = array();
       $field_errors = array();
 
-      $billing_data['reference_field'] = sanitize_text_field($_REQUEST['reference_field']);
-
-      if ($_REQUEST['reference_field'] == '') {
-        $field_errors['oc_refname'] = '1';
-      }
+    
 
       foreach ($address_fields as $key => $field) {
         $billing_data[$key] = sanitize_text_field($_REQUEST[$key]);
@@ -752,11 +714,7 @@ if (!class_exists('OCWMA_front')) {
       $billing_data = array();
       $field_errors = array();
 
-      $billing_data['reference_field'] = sanitize_text_field($_REQUEST['reference_field']);
-
-      if ($_REQUEST['reference_field'] == '') {
-        $field_errors['oc_refname'] = '1';
-      }
+ 
 
       foreach ($address_fields as $key => $field) {
         $billing_data[$key] = sanitize_text_field($_REQUEST[$key]);
@@ -807,11 +765,7 @@ if (!class_exists('OCWMA_front')) {
       $billing_data = array();
       $field_errors = array();
 
-      $billing_data['reference_field'] = sanitize_text_field($_REQUEST['reference_field']);
-
-      if ($_REQUEST['reference_field'] == '') {
-        $field_errors['oc_refname'] = '1';
-      }
+    
 
       foreach ($address_fields as $key => $field) {
         $billing_data[$key] = sanitize_text_field($_REQUEST[$key]);
@@ -869,11 +823,7 @@ if (!class_exists('OCWMA_front')) {
       $billing_data = array();
       $field_errors = array();
 
-      $billing_data['reference_field'] = sanitize_text_field($_REQUEST['reference_field']);
-
-      if ($_REQUEST['reference_field'] == '') {
-        $field_errors['oc_refname'] = '1';
-      }
+   
 
       foreach ($address_fields as $key => $field) {
         $billing_data[$key] = sanitize_text_field($_REQUEST[$key]);
