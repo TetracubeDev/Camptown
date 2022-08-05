@@ -61,7 +61,7 @@ do_action('woocommerce_before_cart');
 
 						if ($_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters('woocommerce_cart_item_visible', true, $cart_item, $cart_item_key)) {
 							$product_permalink = "";
-							$product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
+							$product_permalink = apply_filters('woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink($cart_item) : '', $cart_item, $cart_item_key);
 					?>
 							<tr class="woocommerce-cart-form__cart-item <?php echo esc_attr(apply_filters('woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key)); ?>">
 								<td class="product-thumbnail">
@@ -211,29 +211,30 @@ do_action('woocommerce_before_cart');
 	</div>
 </div>
 
+<div class="row slider-row">
+
+	<section class="home-slider products-slider">
+
+		<div class="container">
+			<h2 class=" singe-product__section-title"> מוצרים נוספים שיכולים להתאים לכם </h2>
+			<?php
+			// Collect the category IDs.
+			$cat_ids = array();
+			foreach (wc()->cart->get_cart() as $cart_item_key => $cart_item) {
+				$cat_ids = array_merge(
+					$cat_ids,
+					$cart_item['data']->get_category_ids()
+				);
+			}
+
+			/* print_r($cat_ids); */
 
 
-<section class="home-slider products-slider">
+			?>
 
+			<div class="horizontal-slider">
 
-	<h2 class=" singe-product__section-title"> מוצרים נוספים שיכולים להתאים לכם </h2>
-	<?php 
-	// Collect the category IDs.
-	$cat_ids = array();
-	foreach ( wc()->cart->get_cart() as $cart_item_key => $cart_item ) {
-	    $cat_ids = array_merge(
-	        $cat_ids, $cart_item['data']->get_category_ids()
-	    );
-	}
-
-	/* print_r($cat_ids); */
-
-
-	?>
-
-	<div class="horizontal-slider">
-
-		<?php /* $i = 3; foreach ( $related_products as $related_product ) :  ?>
+				<?php /* $i = 3; foreach ( $related_products as $related_product ) :  ?>
 
 				<?php
 				$post_object = get_post( $related_product->get_id() );
@@ -247,42 +248,43 @@ do_action('woocommerce_before_cart');
 
 				
 
-		<?php $i++; endforeach; */?>
+		<?php $i++; endforeach; */ ?>
 
 
-		<?php  
-		    $args = array(
-		        'post_type'      => 'product',
-		        'post_status' => 'publish',
-		        'orderby'          => 'rand',
-		        'posts_per_page' => 8,
-	            'tax_query' => array(
-				     array(
-				        'taxonomy' => 'product_cat',
-				        'field'    => 'term_id',
-				        'terms'     =>  /* [360, 362, 389] */$cat_ids,
-				        'operator'  => 'IN'
-				      )
-				  )
-		    );
+				<?php
+				$args = array(
+					'post_type'      => 'product',
+					'post_status' => 'publish',
+					'orderby'          => 'rand',
+					'posts_per_page' => 8,
+					'tax_query' => array(
+						array(
+							'taxonomy' => 'product_cat',
+							'field'    => 'term_id',
+							'terms'     =>  /* [360, 362, 389] */ $cat_ids,
+							'operator'  => 'IN'
+						)
+					)
+				);
 
-		    $loop = new WP_Query( $args );
-		    $i = 3;
-		    while ( $loop->have_posts() ) : $loop->the_post();
-		        global $product; ?>
+				$loop = new WP_Query($args);
+				$i = 3;
+				while ($loop->have_posts()) : $loop->the_post();
+					global $product; ?>
 
-		        <div class="slide" style="z-index: <?php echo "-" . $i ?>" data-aos="fade-up" data-aos-delay="<?php echo $i . "00" ?>" data-aos-duration="500" data-aos-anchor-placement="top-bottom">
-	       	    	<?php wc_get_template_part('content', 'product'); ?>
-		        </div>
-		    <?php $i++; endwhile;
+					<div class="slide" style="z-index: <?php echo "-" . $i ?>" data-aos="fade-up" data-aos-delay="<?php echo $i . "00" ?>" data-aos-duration="500" data-aos-anchor-placement="top-bottom">
+						<?php wc_get_template_part('content', 'product'); ?>
+					</div>
+				<?php $i++;
+				endwhile;
 
-		    wp_reset_query();
-		?>
+				wp_reset_query();
+				?>
 
-	</div>
+			</div>
 
-
-
+		</div>
+</div>
 
 
 

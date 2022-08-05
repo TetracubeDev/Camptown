@@ -791,7 +791,7 @@ jQuery(document).ready(function ($) {
     })
     $('#custom-shipping-methods__btn_3').click(function () {
         if (is_valid_check_custom_shipping_methods__inputs_3()) {
-            $('.delivery-block .toggless__title').click()
+            $(this).closest('.toggless').next().find('.toggless__title').click()
             $('.interactive-form__step .check').next().addClass('check')
         }
     })
