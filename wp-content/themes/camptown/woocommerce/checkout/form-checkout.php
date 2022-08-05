@@ -26,7 +26,8 @@ $customer = new WC_Customer($user_id);
 
 ?>
 <style>
-	.defaultBillingAddesses, .defaultShippingAddesses {
+	.defaultBillingAddesses,
+	.defaultShippingAddesses {
 		display: none;
 	}
 </style>
@@ -101,6 +102,7 @@ $customer = new WC_Customer($user_id);
 	#shipping_address_2_field {
 		order: 7;
 	}
+
 	#billing_address_3_field,
 	#shipping_address_3_field {
 		order: 8;
@@ -177,7 +179,7 @@ $customer = new WC_Customer($user_id);
 
 				<div class="toggless">
 					<div class="toggless__item">
-						<div class="toggless__title">
+						<div class="toggless__title ">
 							<div class="toggless__icon default-icon">
 								<i class="icon-coupon"></i>
 							</div>
@@ -205,9 +207,11 @@ $customer = new WC_Customer($user_id);
 			<?php } ?>
 
 
-			<div class="toggless <?php if (is_user_logged_in()) { echo 'hidden'; }?>" >
+			<div class="toggless <?php if (is_user_logged_in()) {
+										echo 'hidden';
+									} ?>">
 				<div class="toggless__item">
-					<div class="toggless__title in">
+					<div class="toggless__title ">
 						<div class="toggless__icon default-icon">
 							01
 						</div>
@@ -236,14 +240,18 @@ $customer = new WC_Customer($user_id);
 			<form name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url(wc_get_checkout_url()); ?>" enctype="multipart/form-data">
 				<div class="toggless delivery-block">
 					<div class="toggless__item">
-						<div class="toggless__title">
+						<div class="toggless__title in">
 							<div class="toggless__icon default-icon">
-								<?php if (!is_user_logged_in()) { echo '02'; } else { echo '01'; } ?>
+								<?php if (!is_user_logged_in()) {
+									echo '02';
+								} else {
+									echo '01';
+								} ?>
 							</div>
 							בחירת משלוח ואיסוף
 							<i class="icon-plus"></i>
 						</div>
-						<div class="toggless__content" style="display: none;">
+						<div class="toggless__content">
 							<div class="custom-shipping-methods">
 								<?php if (WC()->cart->needs_shipping() && WC()->cart->show_shipping()) : ?>
 									<?php do_action('woocommerce_review_order_before_shipping'); ?>
@@ -275,7 +283,9 @@ $customer = new WC_Customer($user_id);
 
 										?>
 											<li data-name="<?= $item_name ?>">
-												<input name="my_shipping_method-<?php echo $item_id; ?>" <?php if (get_row_index() == 1 ) {echo "checked";} ?> data-cost="<?php the_sub_field('cost'); ?>" data-id="<?= $item_id; ?>" type="radio" value="<?php the_sub_field('id'); ?>" id="product-<?php echo $item_id; ?>-shipping-<?php the_sub_field('id'); ?>">
+												<input name="my_shipping_method-<?php echo $item_id; ?>" <?php if (get_row_index() == 1) {
+																												echo "checked";
+																											} ?> data-cost="<?php the_sub_field('cost'); ?>" data-id="<?= $item_id; ?>" type="radio" value="<?php the_sub_field('id'); ?>" id="product-<?php echo $item_id; ?>-shipping-<?php the_sub_field('id'); ?>">
 												<label for="product-<?php echo $item_id; ?>-shipping-<?php the_sub_field('id'); ?>">
 													<strong><?php the_sub_field('name'); ?></strong>: <span class="price">₪ <?php the_sub_field('cost'); ?></span>
 												</label>
@@ -321,7 +331,7 @@ $customer = new WC_Customer($user_id);
 
 									if (methods.length) {
 										for (const m of methods) {
-										
+
 											let label = m.querySelector('input:checked + label strong').innerText
 											let price = m.querySelector('input:checked + label .price').innerText
 											let desc = m.querySelector('input:checked + label + .shipping_method_description small').innerText
@@ -334,11 +344,17 @@ $customer = new WC_Customer($user_id);
 												let id = input.value
 												let product_id = input.getAttribute('data-id')
 												let cost = input.getAttribute('data-cost')
-												result_str += `<div>${name}</div>`											
-												result_str += '<div><strong>' + label + '</strong>: '+ price +'</div><div>'												
+												result_str += `<div>${name}</div>`
+												result_str += '<div><strong>' + label + '</strong>: ' + price + '</div><div>'
 												result_str += desc + '</div><br>'
 
-												result_id[product_id] = {id,name,cost,desc,del_name: label};
+												result_id[product_id] = {
+													id,
+													name,
+													cost,
+													desc,
+													del_name: label
+												};
 											}
 										}
 										data_stor_id.value = JSON.stringify(result_id)
@@ -354,7 +370,7 @@ $customer = new WC_Customer($user_id);
 
 
 							<div class="text-left">
-								<span class="btn site-color-btn custom-shipping-methods__btn" >המשך</span>
+								<span class="btn site-color-btn custom-shipping-methods__btn">המשך</span>
 							</div>
 						</div>
 					</div>
@@ -363,14 +379,20 @@ $customer = new WC_Customer($user_id);
 
 				<div class="toggless">
 					<div class="toggless__item">
-						<div class="toggless__title <?php if (is_user_logged_in()) { echo 'in'; } ?>">
+						<div class="toggless__title ">
 							<div class="toggless__icon default-icon">
-								<?php if (!is_user_logged_in()) { echo '03'; } else { echo '02'; } ?>
+								<?php if (!is_user_logged_in()) {
+									echo '03';
+								} else {
+									echo '02';
+								} ?>
 							</div>
 							פרטי משלוח
 							<i class="icon-plus"></i>
 						</div>
-						<div class="toggless__content" <?php if (!is_user_logged_in()) { echo 'style="display: none;"'; } ?>>
+						<div class="toggless__content" <?php if (!is_user_logged_in()) {
+															echo 'style="display: none;"';
+														} ?>>
 
 							<?php if ($checkout->get_checkout_fields()) : ?>
 
@@ -395,12 +417,16 @@ $customer = new WC_Customer($user_id);
 					<div class="toggless__item">
 						<div class="toggless__title">
 							<div class="toggless__icon default-icon">
-								<?php if (!is_user_logged_in()) { echo '04'; } else { echo '03'; } ?>
+								<?php if (!is_user_logged_in()) {
+									echo '04';
+								} else {
+									echo '03';
+								} ?>
 							</div>
 							תשלום
 							<i class="icon-plus"></i>
 						</div>
-						<div class="toggless__content" style="display: none;">
+						<div class="toggless__content">
 
 							<?php do_action('payment_block', $checkout); ?>
 
@@ -426,7 +452,7 @@ $customer = new WC_Customer($user_id);
 		<div id="order_review" class="cart-block woocommerce-checkout-review-order">
 			<div class="cart_totals">
 				<div class="cart-block__title">
-				סיכום הקנייה
+					סיכום הקנייה
 				</div>
 			</div>
 
@@ -455,7 +481,6 @@ $customer = new WC_Customer($user_id);
 			//minimumResultsForSearch: -1
 		});
 
-
 		$('form.checkout.woocommerce-checkout').bind('DOMSubtreeModified',function(){
 			if ($('ul.woocommerce-error').length) {
 			    $('ul.woocommerce-error').insertAfter('.interactive-form__step')//where you want to place it
@@ -463,25 +488,23 @@ $customer = new WC_Customer($user_id);
 		});
 
 
-
-
 		$('.newAccFName').on('input', function() {
-            let val = $(this).val()
-            $('#billing_first_name').val(val)
-        })
+			let val = $(this).val()
+			$('#billing_first_name').val(val)
+		})
 		$('.newAccLName').on('input', function() {
-            let val = $(this).val()
-            $('#billing_last_name').val(val)
-        })
+			let val = $(this).val()
+			$('#billing_last_name').val(val)
+		})
 		$('.newAccLEmail').on('input', function() {
-            let val = $(this).val()
-            $('#billing_email').val(val)
-        })
+			let val = $(this).val()
+			$('#billing_email').val(val)
+		})
 		$('.newAccLTel').on('input', function() {
-            let val = $(this).val()
-            $('#billing_phone').val(val)
-        })
-		
+			let val = $(this).val()
+			$('#billing_phone').val(val)
+		})
+
 
 		$("#create-user").change(function() {
 			if(this.checked) {
@@ -520,7 +543,7 @@ $customer = new WC_Customer($user_id);
 		});
 
 
-		
+
 	});
 </script>
 
