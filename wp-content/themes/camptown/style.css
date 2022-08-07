@@ -7538,6 +7538,10 @@ input[type=file] {
     flex-wrap: wrap;
 }
 
+.archive .section {
+    overflow: hidden;
+}
+
 .row.products {
     margin-left: -20px;
     margin-right: -20px;
@@ -12053,6 +12057,7 @@ section .woocommerce-form-register:not(.active) {
     padding: 5px;
 }
 
-#account_password, #account_password+span{
+#account_password,
+#account_password+span {
     display: none!important;
 }
