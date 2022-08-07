@@ -7538,7 +7538,7 @@ input[type=file] {
     flex-wrap: wrap;
 }
 
-.archive .section {
+.archive .wrapper {
     overflow: hidden;
 }
 
