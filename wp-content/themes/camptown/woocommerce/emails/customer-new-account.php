@@ -21,14 +21,17 @@ defined('ABSPATH') || exit;
 do_action('woocommerce_email_header', $email_heading, $email); ?>
 
 <?php
-function getProtectedValue($obj, $name)
+/* function getProtectedValue($obj, $name)
 {
 	$array = (array)$obj;
 	$prefix = chr(0) . '*' . chr(0);
 	return $array[$prefix . $name];
-}
-$site_address = getProtectedValue($email, 'placeholders')['{site_url}'];
-$site_name = getProtectedValue($email, 'placeholders')['{site_title}'];
+} */
+/* $site_address = getProtectedValue($email, 'placeholders')['{site_url}'];
+$site_name = getProtectedValue($email, 'placeholders')['{site_title}']; */
+
+$site_address = get_site_url();
+$site_name = get_bloginfo('name');
 ?>
 
 <div class="email__header">

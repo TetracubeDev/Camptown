@@ -229,7 +229,7 @@ if (!class_exists('OCWMA_front')) {
         } else {
           ?>
           <div class="billing_address_empty">
-            <p class="billing_empty_message">אין לך כתובות חיוב.</p>
+            <p class="billing_empty_message">אין לך כתובות חיוב</p>
           </div>
           <?php
         }
@@ -278,7 +278,7 @@ if (!class_exists('OCWMA_front')) {
         } else {
           ?>
           <div class="shipping_address_empty">
-            <p class="shipping_empty_message">אין לך כתובות למשלוח.</p>
+            <p class="shipping_empty_message">כתובת למשלוח לא קיימת</p>
           </div>
       <?php
         }
