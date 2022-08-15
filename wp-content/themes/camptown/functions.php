@@ -1042,7 +1042,7 @@ function camptown_order_send($order_id) {
     );
 
 
-    $url = 'https://wsdemo.admonis.com/api/PushPlatformsOrders';
+    $url = 'https://ws.admonis.com/api/PushPlatformsOrders';
     $ch = curl_init($url);
 
     $jsonDataEncoded = json_encode($jsonData);

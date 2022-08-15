@@ -318,7 +318,7 @@ if (!class_exists('OCWMA_admin_menu')) {
                             } else {
                                 ?>
                                 <div class="billing_address_empty">
-                                    <p class="billing_empty_message">You have no billing addresses.</p>
+                                    <p class="billing_empty_message">אין לך כתובות חיוב</p>
                                 </div>
                             <?php
                             }
@@ -356,7 +356,7 @@ if (!class_exists('OCWMA_admin_menu')) {
                             } else {
                                 ?>
                                 <div class="shipping_address_empty">
-                                    <p class="shipping_empty_message"><?php echo esc_html('You have no shipping addresses'); ?></p>
+                                    <p class="shipping_empty_message">כתובת למשלוח לא קיימת</p>
                                 </div>
                             <?php
                             }
