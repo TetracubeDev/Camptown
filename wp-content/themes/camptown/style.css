@@ -10455,9 +10455,11 @@ table {
 .woocommerce-breadcrumb {
     padding-top: 18px;
 }
+
 .woocommerce-error {
     margin-bottom: 15px;
 }
+
 .woocommerce-cart .woocommerce,
 .woocommerce-checkout:not(.woocommerce-order-received) .woocommerce {
     padding-top: 49px;
@@ -10532,7 +10534,7 @@ table {
 }
 
 .woocommerce-cart-form .product-name {
-   /* font-size: 20px;*/
+    /* font-size: 20px;*/
     font-weight: bold;
     line-height: 1.3;
     padding-right: 22px;
@@ -11428,7 +11430,8 @@ select.ocwma_select_shipping {
     margin-bottom: 23px;
 }
 
-.ocwma_select, .ocwma_select_shipping {
+.ocwma_select,
+.ocwma_select_shipping {
     display: none;
 }
 
