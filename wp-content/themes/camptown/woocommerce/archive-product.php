@@ -28,8 +28,6 @@ if (is_shop()) {
 }
 ?>
 
-
-
 <style>
 	.banner {
 		background-color: <?php the_field('theme_color', 'option'); ?>;
@@ -37,9 +35,8 @@ if (is_shop()) {
 </style>
 
 
-
 <?php if (get_field('spare_parts', $cat_id)) { ?>
-	<section class="section spare-parts">
+    <section class="section spare-parts">
 		<div class="breadcrumb">
 			<?php echo do_shortcode('[wpseo_breadcrumb]'); ?>
 		</div>
@@ -88,7 +85,6 @@ if (is_shop()) {
 	</section>
 
 <?php } else { ?>
-
 	<?php if (get_field('banner', $cat_id)) { ?>
 		<section class="banner category-banner">
 			<img src="<?= get_field('banner', $cat_id)['url'] ?>" alt="<?= get_field('banner', $cat_id)['alt'] ?>" class="banner__image">
@@ -169,9 +165,9 @@ if (is_shop()) {
 				<?php }*/ ?>
 
 				<div class="category-line">
-					<div class="category-line__inner">	
+					<div class="category-line__inner">
 						<?php if (have_rows('category_items', $cat_id)) : ?>
-							
+
 							<?php while (have_rows('category_items', $cat_id)) : the_row(); ?>
 							<?php
 								$link = get_sub_field('link');
@@ -189,7 +185,7 @@ if (is_shop()) {
 								</div>
 
 							<?php endwhile; ?>
-								
+
 						<?php endif; ?>
 					</div>
 				</div>
@@ -231,56 +227,115 @@ if (is_shop()) {
 				?>
 
 				<?php
-				if (woocommerce_product_loop()) {
+                if($cat_id->term_id) {
+                    $spare_parts = get_field('spare_parts', 'product_cat_'.$cat_id->term_id);
+                    if($spare_parts) {
+                        $args = array(
+                            'posts_per_page' => -1,
+                            'post_type' => 'product',
+                            'post_status' =>'publish',
+                            'meta_query' => array(
+                                'relation' => 'OR',
+                                array(
+                                    'key' => 'spare_parts_products',
+                                    'value' => '',
+                                    'compare' => '!='
+                                )
+                            )
+                        );
+                        $products_term = array();
+                        $products = new WP_Query($args);
+                        if($products->posts) {
+                            foreach ($products->posts as $v) {
+                                $sp = get_field('spare_parts_products', $v->ID);
+                                if($sp) {
+                                    foreach ($sp as $r) {
+                                        $terms = get_the_terms( $r->ID, 'product_cat' );
+                                        if($terms) {
+                                            foreach ($terms as $t) {
+                                                if($t->term_id == $cat_id->term_id) {
+                                                    $products_term[] = $v->ID;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        $products_term = array_unique($products_term);
+                        if($products_term) {
+                            foreach ($products_term as $v) {
+                                $image = wp_get_attachment_image_src( get_post_thumbnail_id( $v ), 'single-post-thumbnail' );
+                                echo '<div class=" col-md-' . $col . ' col-6 products__item">
+                                    <div class="product-card">
+                                        <a href="/spare-parts/?prod='.$v.'" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
+                                            <div class="product-card__image">
+                                                <div class="product-card__image-inner">
+                                                    <img width="300" height="300" src="'.$image[0].'" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="" loading="lazy" />
+                                                </div>
+                                            </div>
+                                            <div class="product-card__content">
+                                                <div class="product-card__title">'.get_the_title($v).'</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>';
+                            }
+                        }
 
-					if (!get_field('spare_parts', $cat_id)) {
-						/**
-						 * Hook: woocommerce_before_shop_loop.
-						 *
-						 * @hooked woocommerce_output_all_notices - 10
-						 * @hooked woocommerce_result_count - 20
-						 * @hooked woocommerce_catalog_ordering - 30
-						 */
-						echo '<div class="products-filter">';
-						do_action('woocommerce_before_shop_loop');
 
-						echo do_shortcode('[br_filter_single filter_id=371]');
-						echo '</div>';
-					}
+                    } else {
+                        if (woocommerce_product_loop()) {
 
-					woocommerce_product_loop_start();
+                            if (!get_field('spare_parts', $cat_id)) {
+                                /**
+                                 * Hook: woocommerce_before_shop_loop.
+                                 *
+                                 * @hooked woocommerce_output_all_notices - 10
+                                 * @hooked woocommerce_result_count - 20
+                                 * @hooked woocommerce_catalog_ordering - 30
+                                 */
+                                echo '<div class="products-filter">';
+                                do_action('woocommerce_before_shop_loop');
 
-					if (wc_get_loop_prop('total')) {
-						while (have_posts()) {
-							the_post();
+                                echo do_shortcode('[br_filter_single filter_id=371]');
+                                echo '</div>';
+                            }
 
-							/**
-							 * Hook: woocommerce_shop_loop.
-							 */
-							do_action('woocommerce_shop_loop');
-							echo '<div class=" col-md-' . $col . ' col-6 products__item">';
-							wc_get_template_part('content', 'product');
-							echo '</div>';
-						}
-					}
+                            woocommerce_product_loop_start();
 
-					woocommerce_product_loop_end();
+                            if (wc_get_loop_prop('total')) {
+                                while (have_posts()) {
+                                    the_post();
 
-					/**
-					 * Hook: woocommerce_after_shop_loop.
-					 *
-					 * @hooked woocommerce_pagination - 10
-					 */
-					do_action('woocommerce_after_shop_loop');
-				} else {
-					/**
-					 * Hook: woocommerce_no_products_found.
-					 *
-					 * @hooked wc_no_products_found - 10
-					 */
-					do_action('woocommerce_no_products_found');
-				}
+                                    /**
+                                     * Hook: woocommerce_shop_loop.
+                                     */
+                                    do_action('woocommerce_shop_loop');
+                                    echo '<div class=" col-md-' . $col . ' col-6 products__item">';
+                                    wc_get_template_part('content', 'product');
+                                    echo '</div>';
+                                }
+                            }
 
+                            woocommerce_product_loop_end();
+
+                            /**
+                             * Hook: woocommerce_after_shop_loop.
+                             *
+                             * @hooked woocommerce_pagination - 10
+                             */
+                            do_action('woocommerce_after_shop_loop');
+                        } else {
+                            /**
+                             * Hook: woocommerce_no_products_found.
+                             *
+                             * @hooked wc_no_products_found - 10
+                             */
+                            do_action('woocommerce_no_products_found');
+                        }
+                    }
+                }
 				?>
 			</div>
 		</section>

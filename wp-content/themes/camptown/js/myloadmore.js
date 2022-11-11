@@ -15,13 +15,11 @@ window.addEventListener('load', () => {
 		let timeout
 
 		console.log(selected_filter, all_filter_buttons, show_all_btn, show_more_btn, posts_wrap, posts)
-		if (all_filter_buttons && all_filter_buttons.length &&
-			show_all_btn && show_more_btn && posts_wrap
-		) {
+
 			init()
 
 			show_more_btn.addEventListener('click', () => update(null, true))
-		}
+		
 
 		function init() {
 

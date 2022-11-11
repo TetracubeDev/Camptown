@@ -1,5 +1,48 @@
-<?php get_header(); ?>
+<?php
 
+get_header();
+
+$products_arr = array();
+$articles = array();
+if (have_posts()) {
+    while (have_posts()) {
+        the_post();
+        switch (get_post_type()) {
+            case 'product':
+                $products_arr[] = get_the_ID();
+                break;
+            case 'post':
+                $articles[] = get_the_ID();
+                break;
+        }
+    }
+}
+
+global $wpdb;
+$args = array(
+    'posts_per_page' => -1,
+    'post_type' => 'product',
+    'post_status' =>'publish',
+    'meta_query' => array(
+        'relation' => 'OR',
+        array(
+            'key' => '_sku',
+            'value' => $_GET['s'],
+            'compare' => 'LIKE'
+        )
+    )
+);
+$products = new WP_Query($args);
+if (!$products->have_posts() and $products_arr) {
+    $args = array(
+        'posts_per_page' => -1,
+        'post_type' => 'product',
+        'post_status' =>'publish',
+        'post__in' => $products_arr
+    );
+    $products = new WP_Query($args);
+}
+?>
 
 
 
@@ -14,7 +57,7 @@
             <div class="container">
                 <div class="row">
                     <div class="offset-lg-3 col-lg-6">
-                        <?php if (!have_posts()) { ?>
+                        <?php if (!have_posts() and !$products->have_posts()) { ?>
                             <h1 class="section-title">
                                  לא נמצאו תוצאות לחיפוש. 
                             </h1>
@@ -36,36 +79,14 @@
 <section class="section woocommerce-page">
     <div class="container">
 		<?
-		$products = array();
-		$articles = array();
-		if (have_posts()) {
-			while (have_posts()) {
-				the_post();
-				switch (get_post_type()) {
-					case 'product':
-						$products[] = get_the_ID();
-					break;
-					case 'post':
-						$articles[] = get_the_ID();
-					break;
-				}
-       		}
-       	}
-   		if (count($products) > 0) { ?>
+   		if ($products->have_posts()) { ?>
    			<div class="row">
    				<div class="col-12">
        				<h2 class="section-title"> תוצאות חיפוש עבור : <?php echo get_search_query(); ?></h2>
        			</div>
    			</div>
 			<div class="row products columns-4">
-
-		        <? $args = array(
-		            'posts_per_page' => -1,
-		            'post_type' => 'product',
-		            'post_status' =>'publish',
-		            'post__in' => $products,
-		        );
-		        $products = new WP_Query($args);
+		        <?php
 		        if ($products->have_posts()) {
 					while ($products->have_posts()) { $products->the_post(); ?>
                         <div class="col-md-4 col-6 products__item">
@@ -76,7 +97,7 @@
                 <? } ?>
             </div>
    		<? }
-		if (count($articles) > 0) { ?>
+		if ($articles) { ?>
 			<div class="row">
 				<div class="col-12">
        				<h2 class="section-title"> תוצאות חיפוש עבור : <?php echo get_search_query(); ?></h2>

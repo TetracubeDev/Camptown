@@ -86,7 +86,7 @@ defined('ABSPATH') || exit;
 		display: inline-block;
 		margin: 13px auto 30px;
 		border-radius: 25px;
-		background-color: rgb(68, 182, 76);
+		background-color: <?php the_field('theme_color', 'option'); ?>;
 		font-size: 18px;
 		font-family: "Arial";
 		color: white !important;

@@ -79,9 +79,9 @@
 		.woocommerce-account .breadcrumb,
 		.woocommerce-account .breadcrumb a,
 		.woocommerce-account .breadcrumb span span span,
-		.spare-parts  .breadcrumb,
-		.spare-parts  .breadcrumb a,
-		.spare-parts  .breadcrumb span span span,
+		.spare-parts .breadcrumb,
+		.spare-parts .breadcrumb a,
+		.spare-parts .breadcrumb span span span,
 		.select2-selection__arrow:before {
 			color: <?php the_field('default_text', 'option'); ?>;
 		}
@@ -149,13 +149,62 @@
 		}
 
 
+		.topbar a:not(.topbar__tel),
+		.horizontal-slider .slick-arrow i,
+		.horizontal-slider .slick-arrow:hover i,
+		.main-slider .slick-arrow:hover,
+		.home-services__link:hover,
+		.home-services__link,
+		.home-services__item:nth-child(2) .home-services__title,
+		.home-services__item:nth-child(2) .home-services__text,
+		.footer .socials a:hover i,
+		.onsale,
+		.modal__buttons a,
+		.modal__buttons button,
+		.modal__close i,
+		a.whatsapp,
+		a.whatsapp:hover,
+		.banner__title,
+		.breadcrumb,
+		.breadcrumb a,
+		.article-header__category,
+		.article-header__category:hover,
+		a.back-to-blog i,
+		.site-color-btn,
+		.site-color-btn:hover,
+		input[type=checkbox]+span:before,
+		.login-modal form .login-modal__submit button,
+		.step__button,
+		.icon-eye-open,
+		input[type=submit],
+		.products-filter .nice-select,
+		.woocommerce-ordering .nice-select:before,
+		.woocommerce-ordering .nice-select:before,
+		.banner__text p,
+		.login_msg.success,
+		.cart-btn__quantity,
+		.single-product__description-title.in:before,
+		.product-slider .slick-arrow:hover,
+		.single-product__share ul li i,
+		.mini-cart__buttons a.checkout,
+		.wc-proceed-to-checkout a,
+		.woocommerce-form-login__submit,
+		.place-order button,
+		.woocommerce-Button,
+		.woocommerce-Button:hover,
+		.account__button,
+		.account__button:hover,
+		.woocommerce-address-fields button,
+		.form_option_billing,
+		.form_option_shipping {
+			color: #fff;
+		}
 
 
 
 		a.topbar__tel,
-		.topbar a:hover,
+		.topbar a:not(.topbar__tel):hover,
 		.section-title span,
-		.main-slider .slick-arrow:hover,
 		.image-section__links a:after,
 		.arrow-btn:after,
 		.product-card__price,
@@ -181,7 +230,6 @@
 		.product-price bdi,
 		.cart-discount,
 		.woocommerce-checkout-review-order .product-total .amount,
-
 		.page-numbers li a:hover,
 		.interactive-form-modal__content-text p a {
 			color: <?php the_field('theme_color', 'option'); ?>;
@@ -229,8 +277,6 @@
 		.back-to-top:hover {
 			background-color: <?php the_field('theme_color', 'option'); ?>;
 		}
-
-
 
 		.alternative-sidebar__images>div:first-child .alternative-sidebar__image-text-underline {
 			border-bottom: 1px solid <?php the_field('theme_color', 'option'); ?>;
@@ -352,55 +398,6 @@
 		}
 
 
-		.topbar a:not(.topbar__tel),
-		.horizontal-slider .slick-arrow i,
-		.horizontal-slider .slick-arrow:hover i,
-		.main-slider .slick-arrow:hover,
-		.home-services__link:hover,
-		.home-services__link,
-		.home-services__item:nth-child(2) .home-services__title,
-		.home-services__item:nth-child(2) .home-services__text,
-		.footer .socials a:hover i,
-		.onsale,
-		.modal__buttons a,
-		.modal__buttons button,
-		.modal__close i,
-		a.whatsapp,
-		a.whatsapp:hover,
-		.banner__title,
-		.breadcrumb,
-		.breadcrumb a,
-		.article-header__category,
-		a.back-to-blog i,
-		.site-color-btn,
-		.site-color-btn:hover,
-		input[type=checkbox]+span:before,
-		.login-modal form .login-modal__submit button,
-		.step__button,
-		.icon-eye-open,
-		input[type=submit],
-		.products-filter .nice-select,
-		.woocommerce-ordering .nice-select:before,
-		.woocommerce-ordering .nice-select:before,
-		.banner__text p,
-		.login_msg.success,
-		.cart-btn__quantity,
-		.single-product__description-title.in:before,
-		.product-slider .slick-arrow:hover,
-		.single-product__share ul li i,
-		.mini-cart__buttons a.checkout,
-		.wc-proceed-to-checkout a,
-		.woocommerce-form-login__submit,
-		.place-order button,
-		.woocommerce-Button,
-		.woocommerce-Button:hover,
-		.account__button,
-		.account__button:hover,
-		.woocommerce-address-fields button,
-		.form_option_billing,
-		.form_option_shipping {
-			color: #fff;
-		}
 
 		.article-header__category svg {
 			fill: #fff;
@@ -452,7 +449,7 @@
 			background-color: <?php the_field('default_text', 'option'); ?> !important;
 		}
 
-		.megamenu__inner{
+		.megamenu__inner {
 			background-color: #f4f3f1;
 		}
 
@@ -979,6 +976,65 @@
 										<input type="text" value="<?php echo get_search_query() ?>" placeholder="חיפוש" name="s" id="s" />
 									</form>
 
+                                    <div class="search-result-list" id="search-form-result">
+                                        <div class="items">
+                                        <?php
+                                        $args = array(
+                                            'posts_per_page' => -1,
+                                            'post_type' => 'product',
+                                            'post_status' =>'publish'
+                                        );
+                                        $products = new WP_Query($args);
+                                        if($products->posts) {
+                                            foreach($products->posts as $v) {
+                                                $product = wc_get_product( $v->ID );
+                                                $image = wp_get_attachment_image_src( get_post_thumbnail_id( $v->ID ), 'thumbnail' );
+                                                echo '<div class="item">
+                                                    <div class="searchable">'.$v->post_title.' '.$product->get_sku().'</div>
+                                                    <a href="'.get_the_permalink($v->ID).'">
+                                                        <span class="image">';
+                                                        if($image) {
+                                                            echo '<img src="'.$image[0].'" />';
+                                                        }
+                                                        echo '</span>
+                                                        <span class="info">
+                                                            <span class="name">'.$v->post_title.'</span>
+                                                            <span class="sku">'.$product->get_sku().'</span>
+                                                        </span>
+                                                    </a>
+                                                </div>';
+                                            }
+                                        }
+
+                                        $cat_args = array(
+                                            'orderby'    => 'name',
+                                            'order'      => 'asc',
+                                            'hide_empty' => false,
+                                        );
+                                        $product_categories = get_terms( 'product_cat', $cat_args);
+                                        if($product_categories) {
+                                            foreach ($product_categories as $v) {
+                                                $thumbnail_id = get_term_meta($v->term_id, 'thumbnail_id', true );
+                                                $image = wp_get_attachment_url($thumbnail_id);
+
+                                                echo '<div class="item item-category">
+                                                    <div class="searchable">'.$v->name.'</div>
+                                                    <a href="'.get_category_link($v->term_id).'">
+                                                        <span class="image">';
+                                                if($image) {
+                                                    echo '<img src="'.$image.'" />';
+                                                }
+                                                echo '</span>
+                                                        <span class="info">
+                                                            <span class="name">'.$v->name.'</span>
+                                                        </span>
+                                                    </a>
+                                                </div>';
+                                            }
+                                        }
+                                        ?>
+                                        </div>
+                                    </div>
 
 									<!-- <form action="">
 							<input type="search" placeholder="חיפוש">
@@ -1139,7 +1195,7 @@
 						<?php endif; ?>
 
 
-						<a href="tel:5060" class="topbar__tel">
+						<a href="tel:5060" class="topbar__tel tel">
 							<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 48 48" style="enable-background:new 0 0 48 48;" xml:space="preserve">
 
 								<g>

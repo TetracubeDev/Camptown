@@ -40,7 +40,7 @@ global $product;
 		<div class="col-12 col-lg-6">
 			<div class="single-product-content">
 				<div class="text-center">
-					<a href="<?php echo get_permalink(wc_get_page_id('shop')); ?>" class="alternative-btn ">
+					<a href="<?php echo get_permalink( wc_get_page_id( 'shop' ) ); ?>" class="alternative-btn ">
 						<i class="icon-arrow-right"></i>
 						חזור
 					</a>
@@ -64,17 +64,17 @@ global $product;
 				<div class="single-product__info">
 
 
-					<?php if (have_rows('deliveries')) : ?>
-						<?php while (have_rows('deliveries')) : the_row();
-						?>
-							<div class="single-product__delivery">
-								<i class="icon-delivery"></i>
-								<div>
-									<p><strong><?php the_sub_field('name'); ?></strong> - ₪ <?php the_sub_field('cost'); ?></p>
-									<p style="color: #706f6f;">זמן אספקה: <?php the_sub_field('days'); ?> ימי עסקים</p>
+					<?php if( have_rows('deliveries') ): ?>
+					    <?php while( have_rows('deliveries') ): the_row(); 
+					        ?>
+				        	<div class="single-product__delivery">
+					       		<i class="icon-delivery"></i>
+					       		<div>
+					       			<p><strong><?php the_sub_field('name'); ?></strong> - ₪ <?php the_sub_field('cost'); ?></p>
+									<p style="color: #706f6f;">זמן אספקה:  <?php the_sub_field('days'); ?> ימי עסקים</p>
 								</div>
 							</div>
-						<?php endwhile; ?>
+					    <?php endwhile; ?>
 					<?php endif; ?>
 
 
@@ -133,8 +133,8 @@ global $product;
 							<a href="<?= get_field('file')['url']; ?>" download><i class="icon-pdf"></i> <?= get_field('file')['title']; ?></a>
 						</div>
 					<?php } else { ?>
-						<div>
-
+						<div >
+							
 						</div>
 					<?php } ?>
 

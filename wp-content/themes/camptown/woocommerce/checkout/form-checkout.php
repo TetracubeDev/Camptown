@@ -275,13 +275,13 @@ $customer = new WC_Customer($user_id);
 
 								$item_name = $cart_item['data']->get_title();
 								echo '<div class="shipping-product-name"> ' . $item_name . ' </div>';
-								$item_id = $cart_item['product_id'];
+								$item_id = $cart_item['product_id']; ?>
 
-								if (have_rows('deliveries', $item_id)) : ?>
-									<ul class="my_shipping_method">
-										<?php while (have_rows('deliveries', $item_id)) : the_row();
+								<ul class="my_shipping_method">
 
-										?>
+									<?php if (have_rows('deliveries', $item_id)) { ?>
+
+										<?php while (have_rows('deliveries', $item_id)) : the_row(); ?>
 											<li data-name="<?= $item_name ?>">
 												<input name="my_shipping_method-<?php echo $item_id; ?>" <?php if (get_row_index() == 1) {
 																												echo "checked";
@@ -294,18 +294,28 @@ $customer = new WC_Customer($user_id);
 										<?php endwhile; ?>
 
 										<li data-name="<?= $item_name ?>">
-											<input name="my_shipping_method-<?php echo $item_id; ?>" data-cost="0.001" data-id="<?= $item_id; ?>" type="radio" value="local" id="product-<?php echo $item_id; ?>-shipping-local">
+											<input name="my_shipping_method-<?php echo $item_id; ?>" data-cost="0" data-id="<?= $item_id; ?>" type="radio" value="0" id="product-<?php echo $item_id; ?>-shipping-local">
+											<label for="product-<?php echo $item_id; ?>-shipping-local">
+												<strong>איסוף עצמי</strong>: <span class="price">₪ 0</span>
+											</label>
+											<div class="shipping_method_description"><small class="smdfw">0 ימים</small></div>
+										</li>
+
+									<?php } else { ?>
+										<li data-name="<?= $item_name ?>">
+											<input checked name="my_shipping_method-<?php echo $item_id; ?>" data-cost="0" data-id="<?= $item_id; ?>" type="radio" value="0" id="product-<?php echo $item_id; ?>-shipping-local">
 											<label for="product-<?php echo $item_id; ?>-shipping-local">
 												<strong>איסוף מקומי</strong>: <span class="price">₪ 0</span>
 											</label>
 											<div class="shipping_method_description"><small class="smdfw">0 ימים</small></div>
 										</li>
-									</ul>
+									<?php } ?>
 
-							<?php endif;
-							}
+									
+								</ul>
 
-							?>
+							<?php } ?>
+
 							<input type="hidden" name="shipping_method_description-value" id="shipping_method_description-value">
 							<input type="hidden" name="shipping_method_description-id" id="shipping_method_description-id">
 

@@ -16,8 +16,10 @@ miniCartOverlay.addEventListener('click', function (e) {
 
 
 jQuery(document).ready(function ($) {
-
-
+    jQuery('.tel').each(function () {
+        let phoneNum = jQuery(this).text().replace(/[^0-9]/g, '');
+        jQuery(this).attr('href', 'tel:' + phoneNum);
+    })
     $('.wpcf7 input').on('input', function () {
         $(this).removeClass('wpcf7-not-valid')
     })
@@ -187,7 +189,6 @@ jQuery(document).ready(function ($) {
             $(' .header__buttons>div').removeClass('in')
             $(this).addClass('in')
             $(this).parent().addClass('in')
-
         }
 
     })
@@ -196,8 +197,10 @@ jQuery(document).ready(function ($) {
     $(window).click(function (e) {
         if (!$(e.target).closest('.header__buttons>div').length) {
             $('.header__buttons, .header__buttons>div').removeClass('in')
+            jQuery('#search-form-result').hide();
         } else if ($(e.target).closest('.search-close').length && $(window).width() < 768) {
             $('.header__buttons, .header__buttons>div').removeClass('in')
+            jQuery('#search-form-result').hide();
         }
     })
 
@@ -482,7 +485,7 @@ jQuery(document).ready(function ($) {
                 jQuery('#mega-menu__' + id).addClass('open');
 
                 jQuery(document).on('mousemove', function (e) {
-                    if (el.is(':hover') || jQuery('#mega-menu__' + id).is(':hover')) {} else {
+                    if (el.is(':hover') || jQuery('#mega-menu__' + id).is(':hover')) { } else {
                         el.removeClass('open');
                         el.closest('a').removeClass('open');
                         jQuery('#mega-menu__' + id).removeClass('open');
@@ -1411,17 +1414,17 @@ function is_valid_check_custom_shipping_methods__inputs_3() {
         }
 
         for (const input of inputs) {
-            if (input.tagName==='SELECT') {
-                if (input.value==='שם ישוב') {
+            if (input.tagName === 'SELECT') {
+                if (input.value === 'שם ישוב') {
                     is_ok = false
                     input.closest('.validate-required')?.querySelector('.select2-selection')?.classList.add('error')
                     input.classList.add('error')
-                   
-                }else{
-                    input.closest('.validate-required')?.querySelector('.select2-selection')?.classList.remove('error')  
+
+                } else {
+                    input.closest('.validate-required')?.querySelector('.select2-selection')?.classList.remove('error')
                     input.classList.remove('error')
                 }
-               continue
+                continue
             }
             if (input.value === '') {
                 is_ok = false
@@ -1443,45 +1446,62 @@ function is_valid_check_custom_shipping_methods__inputs_3() {
 
 
 
+document.addEventListener('DOMContentLoaded', function () {
+    let pass = document.querySelectorAll('[type=password]')
 
-function checkUnAuthUserPassword() {
+    if (pass.length) {
+        for (const item of pass) {
+            item.addEventListener('keyup', (e) => {
+                checkUnAuthUserPassword(e.target)
+            })
+        }
+    }
+});
+
+
+
+
+function checkUnAuthUserPassword(selector = null) {
     let currPassInput = document.querySelector('#pass-new-1');
+    if (selector) {
+        currPassInput = selector
+    }
 
     let currentPassVal = jQuery(currPassInput).val();
     let currentPass = jQuery(currPassInput).val();
-
+    console.log(jQuery(currPassInput).closest('form').find('.pass-validation '))
     if (jQuery(currPassInput).val().length > 0) {
-        jQuery(currPassInput).closest('.pass-new').find('.pass-validation ').addClass('active')
-    } else [
-        jQuery(currPassInput).closest('.pass-new').find('.pass-validation ').removeClass('active')
+        jQuery(currPassInput).closest('form').find('.pass-validation ').addClass('active')
+    } else[
+        jQuery(currPassInput).closest('form').find('.pass-validation ').removeClass('active')
     ]
     if (jQuery(currPassInput).val().length >= 8) {
-        jQuery(currPassInput).closest('.pass-new').find('.pass-count').addClass('active')
+        jQuery(currPassInput).closest('form').find('.pass-count').addClass('active')
 
     } else {
-        jQuery(currPassInput).closest('.pass-new').find('.pass-count').removeClass('active')
+        jQuery(currPassInput).closest('form').find('.pass-count').removeClass('active')
     }
 
 
 
 
     if (/\d/.test(jQuery(currPassInput).val())) {
-        jQuery(currPassInput).closest('.pass-new').find('.pass-num').addClass('active')
+        jQuery(currPassInput).closest('form').find('.pass-num').addClass('active')
     } else {
-        jQuery(currPassInput).closest('.pass-new').find('.pass-num').removeClass('active')
+        jQuery(currPassInput).closest('form').find('.pass-num').removeClass('active')
     }
 
 
 
     if (/[A-Z]/.test(jQuery(currPassInput).val())) {
-        jQuery(currPassInput).closest('.pass-new').find('.pass-register').addClass('active')
+        jQuery(currPassInput).closest('form').find('.pass-register').addClass('active')
     } else {
-        jQuery(currPassInput).closest('.pass-new').find('.pass-register').removeClass('active')
+        jQuery(currPassInput).closest('form').find('.pass-register').removeClass('active')
     }
 
-    if (jQuery(currPassInput).closest('.pass-new').find('.pass-register').hasClass('active') && jQuery(currPassInput).closest('.pass-new').find('.pass-num').hasClass('active') && jQuery(currPassInput).closest('.pass-new').find('.pass-count').hasClass('active')) {
+    if (jQuery(currPassInput).closest('form').find('.pass-register').hasClass('active') && jQuery(currPassInput).closest('form').find('.pass-num').hasClass('active') && jQuery(currPassInput).closest('form').find('.pass-count').hasClass('active')) {
 
-        jQuery(currPassInput).closest('.pass-new').find('.pass-validation').removeClass('active')
+        jQuery(currPassInput).closest('form').find('.pass-validation').removeClass('active')
         jQuery('.pass-audit').show(300)
         /*if ($('#password_current').length) {
             if ($(this).val() == currentPassVal) {
@@ -1540,7 +1560,7 @@ function is_valid_form_inputs() {
             inputs = create_inputs
         }
         for (const input of inputs) {
-            if (input.id==='pass-new-1' && !check_password(input)) {
+            if (input.id === 'pass-new-1' && !check_password(input)) {
 
                 is_ok = false
                 input.classList.add('error')
