@@ -90,7 +90,8 @@
                         
 
                         <div class="article-header__autor">
-                            <? /*= get_the_author(''); */ ?> ישראל ישראלי
+                            
+                            <?= get_the_author_meta('display_name'); ?>
                         </div>
 
                         <?= get_the_date('d/m/y') ?>

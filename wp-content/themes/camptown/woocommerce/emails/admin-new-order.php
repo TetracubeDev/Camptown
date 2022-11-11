@@ -22,16 +22,9 @@ defined( 'ABSPATH' ) || exit;
  */
 do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 <?php
-function getProtectedValues($obj, $name)
-{
-	$array = (array)$obj;
-	$prefix = chr(0) . '*' . chr(0);
-	return $array[$prefix . $name];
-}
-$site_address = getProtectedValues($email, 'placeholders')['{site_url}'];
-$site_name = getProtectedValues($email, 'placeholders')['{site_title}'];
 
-
+$site_address = $_SERVER['SERVER_NAME'];
+$site_name = get_bloginfo('name');
 
 ?>
 <?php if (false) { ?>
@@ -52,7 +45,7 @@ $site_name = getProtectedValues($email, 'placeholders')['{site_title}'];
 		ההזמנה שלך התקבלה בהצלחה!
 	</div>
 	<p style="margin-top: 5px;">
-		תודה שרכשת ב-<?= $site_name ?>. קיבלנו את ההזמנה שביצעת, מס' <?= $order->get_order_number() ?>, אנחנו כעת מטפלים בה. לכל שאלה ניתן לפנות אלינו במייל: <a href="mailto:orders@camptown.co.il">orders@camptown.co.il</a>
+		תודה שרכשת ב-<?= $site_name ?>. קיבלנו את ההזמנה שביצעת, מס' <?= $order->get_order_number() ?>, אנחנו כעת מטפלים בה. לכל שאלה ניתן לפנות אלינו במייל: <a href="mailto:orders@<?= $site_address ?>">orders@<?= $site_address ?></a>
 		או בצ'ט דרך <a href="http://<?= $site_address ?>">האתר</a><br>
 	</p>
 </div>

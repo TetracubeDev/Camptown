@@ -144,7 +144,8 @@ jQuery(document).on("keyup", '.woocommerce-form-login #password', function (e) {
 	var form = jQuery('.woocommerce-form-login');
 	var error;
 	var password = form.find("#password");
-	if (password.val() === '') {
+	
+	if (password[0].value === ''||!check_password_1(password[0])) {
 		form.find(".login_msg.fail").text(zorem_ajax_object.required_message).show();
 		showerror(password);
 		password.removeClass('input-success-icon');
@@ -199,7 +200,7 @@ jQuery(document).on("submit", '.woocommerce-form-register', function (e) {
 
 	var reg_first_name = form.find("#reg_billing_first_name");
 	var reg_last_name = form.find("#reg_billing_last_name");
-	let is_password_valid = check_password(reg_password[0])
+	let is_password_valid = check_password_1(reg_password[0])
 	console.log(is_password_valid)
 	if (!is_password_valid) {
 		error = true
@@ -406,27 +407,27 @@ jQuery(document).on("keyup", '.woocommerce-form-register #reg_password', functio
 	var form = jQuery('.woocommerce-form-register');
 	var error;
 	var reg_password = form.find("#reg_password");
-	//var strength = checkPasswordStrength(form, reg_password);
-	/* var min_password_strength = wc_password_strength_meter_params.min_password_strength; */
-console.log(strength)
-	//error =check_password(e.target)
-	// if (reg_password.val() == '') {
-	// 	//	form.find(".register_msg.fail").text(zorem_ajax_object.required_message).show();
-	// 	//	showerror(reg_password);error = true;
-	// 	reg_password.removeClass('input-success-icon');
-	// 	reg_password.addClass('input-failure-icon');
-	// } else {
-	// 	if (strength < min_password_strength) {
-	// 		//	showerror(reg_password);
-	// 		error = true;
-	// 		reg_password.removeClass('input-success-icon');
-	// 		reg_password.addClass('input-failure-icon');
-	// 	} else {
-	// 		//	hideerror(reg_password);
-	// 		reg_password.addClass('input-success-icon');
-	// 		reg_password.removeClass('input-failure-icon');
-	// 	}
-	// }
+	/* var strength = checkPasswordStrength(form, reg_password);
+	var min_password_strength = wc_password_strength_meter_params.min_password_strength; */
+
+	let strength =check_password_1(e.target)
+	if (reg_password.val() == '') {
+		//	form.find(".register_msg.fail").text(zorem_ajax_object.required_message).show();
+		//	showerror(reg_password);error = true;
+		reg_password.removeClass('error');
+		reg_password.addClass('error');
+	} else {
+		if (!strength) {
+				//showerror(reg_password);
+			error = true;
+			reg_password.removeClass('error');
+			reg_password.addClass('error');
+		} else {
+			//	hideerror(reg_password);
+			reg_password.addClass('error');
+			reg_password.removeClass('error');
+		}
+	}
 	if (!strength) {
 		error = true;
 	} 
@@ -434,7 +435,7 @@ console.log(strength)
 	if (error == true) {
 		return false;
 	} else {
-		//	form.find(".register_msg.fail").hide();
+			form.find(".register_msg.fail").hide();
 	}
 });
 
@@ -605,7 +606,7 @@ function hideerror(element) {
 	element.css("border-color", "");
 }
 
-function check_password(currentPass) {
+function check_password_1(currentPass) {
 
 	let currentPassVal = currentPass.value
 	let res = true

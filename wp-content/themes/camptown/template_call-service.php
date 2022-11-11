@@ -175,7 +175,7 @@ $billing_phone = $customer->get_billing_phone();
                             <?php if (have_rows('sidebar_call_whatsapp')) : ?>
                                 <?php while (have_rows('sidebar_call_whatsapp')) : the_row(); ?>
 
-                                    <a href="https://wa.me/<?php the_sub_field('sidebar_call_whatsapp') ?>" target="_blank" class="call-sidebar__item">
+                                    <a href="https://wa.me/+972509065124" target="_blank" class="call-sidebar__item">
                                         <div class="call-sidebar__item-icon default-icon">
                                             <img src="<?= get_sub_field('icon')['url']  ?>" alt="<?= get_sub_field('icon')['alt']  ?>">
                                         </div>

@@ -24,7 +24,7 @@
                                     <?php while (have_rows('contacts', 'option')) : the_row(); ?>
 
 
-                                        <p> טלפון: <a href="tel:<?php the_sub_field('phone', 'option') ?>"><?php the_sub_field('phone', 'option') ?></a></p>
+                                        <p> טלפון: <a href="tel:<?php the_sub_field('phone', 'option') ?>" class="tel"><?php the_sub_field('phone', 'option') ?></a></p>
                                         <p> דוא”ל: <a href="mailto:<?php the_sub_field('e-mail', 'option') ?>"><?php the_sub_field('e-mail', 'option') ?></a></p>
                                         <p> שעות פעילות: <?php the_sub_field('activity_time', 'option') ?></p>
 
@@ -414,6 +414,26 @@
 
 
     }, false);
+
+    jQuery(document).ready(function(){
+        jQuery('#searchform #s').keyup(function () {
+            var e = jQuery(this),
+                value = e.val(),
+                count = value.length;
+
+            if(count > 2) {
+                jQuery('#search-form-result').show();
+            } else {
+                jQuery('#search-form-result').hide();
+            }
+        });
+
+        jQuery('#searchform #s').jcOnPageFilter({
+            parentSectionClass:'clinics_requests_items',
+            parentLookupClass:'item',
+            childBlockClass:'searchable',
+        });
+    });
 </script>
 
 <?php wp_footer(); ?>

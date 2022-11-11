@@ -1,5 +1,4 @@
 <?php
-
 //add_filter('show_admin_bar', '__return_false'); // Відключити адмінпанель
 function enqueue_custom_style()
 {
@@ -20,6 +19,12 @@ add_action('wp_enqueue_scripts', 'enqueue_custom_style');
 
 function enqueue_custom_script()
 {
+//    wp_deregister_script('jquery');
+//    wp_register_script('jquery', get_template_directory_uri() . '/js/jquery.js');
+//    wp_enqueue_script('jquery');
+
+
+    wp_enqueue_script('jcfilter', get_template_directory_uri() . '/js/jcfilter.js', array('jquery'), true);
     wp_enqueue_script('slick_js', get_template_directory_uri() . '/js/slick.min.js', array('jquery'), true);
     wp_enqueue_script('smoothscroll_js', get_template_directory_uri() . '/js/SmoothScroll.js', array('jquery'), true);
     wp_enqueue_script('uikit_js', get_template_directory_uri() . '/js/uikit.min.js', array('jquery'), true);
@@ -987,7 +992,7 @@ function camptown_order_send($order_id) {
 
         $order_shipments[] = array(
             'ShipmentId' => $shipping_id,
-            'ShipmentCode' => '',
+            'ShipmentCode' => $shipping_id,
             'Package_Estimated_Quantity' => 1,
             'Estimated_Customer_Received_Date' => date('Y-m-d', strtotime('+1 week', strtotime($order->get_date_created()))) . 'T' . $order->get_date_created()->date('H:i:s') . '.342Z',
             'Shipping_Distributor_Receive_Date' => date('Y-m-d', strtotime('+1 week', strtotime($order->get_date_created()))) . 'T' . $order->get_date_created()->date('H:i:s') . '.342Z',
@@ -1228,7 +1233,7 @@ add_action('wp_footer', function () {
                         url: wc_checkout_params.ajax_url,
                         data: {
                             'action': 'woo_get_ajax_data',
-                            'total': total,
+                            'total': total===0?0.000000000000001: total,
                             'nonce': '<?php echo wp_create_nonce('camptown_total'); ?>'
                         },
                         success: function(result) {
