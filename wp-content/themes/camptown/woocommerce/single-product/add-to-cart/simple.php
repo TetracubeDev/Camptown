@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Simple product add to cart
  *
@@ -47,131 +46,14 @@ if ($product->is_in_stock()) : ?>
 
 			do_action('woocommerce_after_add_to_cart_quantity');
 			?>
-			<input type="hidden" name="product_id" value="<?php echo esc_attr($product->get_id()); ?>">
+			<input type="hidden" name="product_id" value="<?php echo esc_attr( $product->get_id() ); ?>" >
 
 			<button type="submit" name="add-to-cart" value="<?php echo esc_attr($product->get_id()); ?>" class="single_add_to_cart_button  btn site-color-btn"><?php echo esc_html($product->single_add_to_cart_text()); ?></button>
 		</div>
 
 		<?php do_action('woocommerce_after_add_to_cart_button'); ?>
 	</form>
-
+	
 	<?php do_action('woocommerce_after_add_to_cart_form'); ?>
 
-<?php else : ?>
-	<a href="#out-of-stock-modal" class="out-of-stock-btn btn site-color-btn modal-btn">צור קשר</a>
-	<div class="modal out-of-stock-modal" id="out-of-stock-modal">
-		<div class="modal__inner">
-			<div class="modal__title">
-
-				<?php $custom_logo = wp_get_attachment_image_src(get_theme_mod('custom_logo'), 'full'); ?>
-
-
-				<img class="header__logo-img" src="<?= $custom_logo[0]; ?>" alt="<?php bloginfo('name'); ?>">
-
-			</div>
-			<?php echo do_shortcode('[contact-form-7 id="3372" title="Out Of Stock Form"]') ?>
-			<div class="modal__close  modal-close-btn">
-				<i class="icon-close-thin"></i>
-			</div>
-		</div>
-	</div>
-
-	<style>
-		.out-of-stock-btn {
-			height: 54px;
-			font-size: 18px;
-			margin: 0 8px;
-			width: 300px;
-		}
-
-		.out-of-stock-modal input:not([type=submit]) {
-			margin-bottom: 20px;
-		}
-
-		.out-of-stock-modal input[type=submit] {
-			margin-top: 12px;
-			height: 50px;
-			width: 100%;
-			border-radius: 35px;
-			font-weight: bold;
-			border: none;
-			transition: all ease .3s;
-		}
-
-		@media (max-width: 767px) {
-
-			.out-of-stock-modal input:not([type=submit]) {
-				height: 44px;
-				margin-bottom: 15px;
-			}
-
-			.out-of-stock-modal input[type=submit] {
-				height: 44px;
-
-			}
-		}
-
-		@media (max-width: 767px) {
-			.out-of-stock-btn {
-				width: 288px;
-				height: 46px;
-				font-size: 17px;
-				margin: 0 5px 0 11px;
-			}
-		}
-
-		@media (max-width: 576px) {
-			.out-of-stock-btn {
-				width: 77vw;
-			}
-		}
-
-		.out-of-stock {
-			display: none;
-		}
-	</style>
-	<script>
-		document.addEventListener('wpcf7mailsent', function(event) {
-			if ('3372' == event.detail.contactFormId) {
-				let sendText = null;
-				let inV = null
-				if (!sendText) {
-					inV = setInterval(insertMessage, 100);
-				}
-
-				function insertMessage() {
-					sendText = jQuery(event.path[1]).find('.wpcf7-response-output').text();
-					if (sendText !== '') {
-						sendText = jQuery(event.path[1]).find('.wpcf7-response-output').text();
-						jQuery('.success-subscribe-message span').html(sendText)
-
-						removeInterval(inV)
-					} else {
-						sendText = null
-					}
-
-				}
-
-				function removeInterval(interval) {
-					clearInterval(interval);
-				}
-
-
-				jQuery('.placeholder').removeClass('is-focused');
-				jQuery('#success-subscribe, .modal-close-area').fadeIn();
-				jQuery('.modal__inner').fadeOut();
-				setTimeout(function() {
-					jQuery('#out-of-stock-modal, .modal-close-area').fadeOut();
-				}, 3000)
-				setTimeout(function() {
-					jQuery('.modal__inner').fadeIn();
-				}, 5000)
-
-
-
-			}
-
-
-		}, false);
-	</script>
 <?php endif; ?>

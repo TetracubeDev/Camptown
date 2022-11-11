@@ -32,7 +32,7 @@ function enqueue_custom_script()
     wp_enqueue_script('fancybox_js', get_template_directory_uri() . '/js/jquery.fancybox.min.js', array('jquery'), true);
     wp_enqueue_script('nice-select_js', get_template_directory_uri() . '/js/jquery.nice-select.js', array('jquery'), true);
 
-    if (is_home()) {
+    if ( is_home() ) {
         wp_enqueue_script('loadmore_js', get_template_directory_uri() . '/js/myloadmore.js', array('jquery'), true);
     }
 
@@ -399,7 +399,7 @@ add_action('wp_footer', function () { ?>
             });
         }
     </script>
-<?php
+    <?php
 });
 
 /**/
@@ -482,12 +482,12 @@ function my_woocommerce_ajax_update_cart()
 // My Account 
 
 
-add_filter('woocommerce_account_menu_items', function ($items) {
+add_filter( 'woocommerce_account_menu_items', function($items) {
     unset($items['downloads']); // Remove downloads item
     $items['orders'] = 'ההזמנות שלי';
 
     return $items;
-}, 99, 1);
+}, 99, 1 );
 
 
 
@@ -660,62 +660,60 @@ function override_default_address_checkout_fields($address_fields)
  * @compatible    WC 3.9
  * @donate $9     https://businessbloomer.com/bloomer-armada/
  */
-
+  
 ///////////////////////////////
 // 1. ADD FIELDS
-
-add_action('woocommerce_register_form_start', 'bbloomer_add_name_woo_account_registration');
-
-function bbloomer_add_name_woo_account_registration()
-{
-?>
-
+  
+add_action( 'woocommerce_register_form_start', 'bbloomer_add_name_woo_account_registration' );
+  
+function bbloomer_add_name_woo_account_registration() {
+    ?>
+  
     <p class="form-row form-row-first">
-        <input type="text" placeholder="* <?php _e('First name', 'woocommerce'); ?>" class="input-text" name="billing_first_name" id="reg_billing_first_name" value="<?php if (!empty($_POST['billing_first_name'])) esc_attr_e($_POST['billing_first_name']); ?>" />
+        <input type="text" placeholder="* <?php _e( 'First name', 'woocommerce' ); ?>" class="input-text" name="billing_first_name" id="reg_billing_first_name" value="<?php if ( ! empty( $_POST['billing_first_name'] ) ) esc_attr_e( $_POST['billing_first_name'] ); ?>" />
     </p>
-
+  
     <p class="form-row form-row-last">
-        <input type="text" placeholder="* <?php _e('Last name', 'woocommerce'); ?>" class="input-text" name="billing_last_name" id="reg_billing_last_name" value="<?php if (!empty($_POST['billing_last_name'])) esc_attr_e($_POST['billing_last_name']); ?>" />
+        <input type="text" placeholder="* <?php _e( 'Last name', 'woocommerce' ); ?>" class="input-text" name="billing_last_name" id="reg_billing_last_name" value="<?php if ( ! empty( $_POST['billing_last_name'] ) ) esc_attr_e( $_POST['billing_last_name'] ); ?>" />
     </p>
-
+  
     <div class="clear"></div>
-
+  
     <?php
 }
-
+  
 ///////////////////////////////
 // 2. VALIDATE FIELDS
-
-add_filter('woocommerce_registration_errors', 'bbloomer_validate_name_fields', 10, 3);
-
-function bbloomer_validate_name_fields($errors, $username, $email)
-{
-    if (isset($_POST['billing_first_name']) && empty($_POST['billing_first_name'])) {
-        $errors->add('billing_first_name_error', __('<strong>Error</strong>: First name is required!', 'woocommerce'));
+  
+add_filter( 'woocommerce_registration_errors', 'bbloomer_validate_name_fields', 10, 3 );
+  
+function bbloomer_validate_name_fields( $errors, $username, $email ) {
+    if ( isset( $_POST['billing_first_name'] ) && empty( $_POST['billing_first_name'] ) ) {
+        $errors->add( 'billing_first_name_error', __( '<strong>Error</strong>: First name is required!', 'woocommerce' ) );
     }
-    if (isset($_POST['billing_last_name']) && empty($_POST['billing_last_name'])) {
-        $errors->add('billing_last_name_error', __('<strong>Error</strong>: Last name is required!.', 'woocommerce'));
+    if ( isset( $_POST['billing_last_name'] ) && empty( $_POST['billing_last_name'] ) ) {
+        $errors->add( 'billing_last_name_error', __( '<strong>Error</strong>: Last name is required!.', 'woocommerce' ) );
     }
     return $errors;
 }
-
+  
 ///////////////////////////////
 // 3. SAVE FIELDS
-
-add_action('woocommerce_created_customer', 'bbloomer_save_name_fields');
-
-function bbloomer_save_name_fields($customer_id)
-{
-    if (isset($_POST['billing_first_name'])) {
-        update_user_meta($customer_id, 'billing_first_name', sanitize_text_field($_POST['billing_first_name']));
-        update_user_meta($customer_id, 'shipping_first_name', sanitize_text_field($_POST['billing_first_name']));
-        update_user_meta($customer_id, 'first_name', sanitize_text_field($_POST['billing_first_name']));
+  
+add_action( 'woocommerce_created_customer', 'bbloomer_save_name_fields' );
+  
+function bbloomer_save_name_fields( $customer_id ) {
+    if ( isset( $_POST['billing_first_name'] ) ) {
+        update_user_meta( $customer_id, 'billing_first_name', sanitize_text_field( $_POST['billing_first_name'] ) );
+        update_user_meta( $customer_id, 'shipping_first_name', sanitize_text_field( $_POST['billing_first_name'] ) );
+        update_user_meta( $customer_id, 'first_name', sanitize_text_field($_POST['billing_first_name']) );
     }
-    if (isset($_POST['billing_last_name'])) {
-        update_user_meta($customer_id, 'billing_last_name', sanitize_text_field($_POST['billing_last_name']));
-        update_user_meta($customer_id, 'shipping_last_name', sanitize_text_field($_POST['billing_last_name']));
-        update_user_meta($customer_id, 'last_name', sanitize_text_field($_POST['billing_last_name']));
+    if ( isset( $_POST['billing_last_name'] ) ) {
+        update_user_meta( $customer_id, 'billing_last_name', sanitize_text_field( $_POST['billing_last_name'] ) );
+        update_user_meta( $customer_id, 'shipping_last_name', sanitize_text_field( $_POST['billing_last_name'] ) );
+        update_user_meta( $customer_id, 'last_name', sanitize_text_field($_POST['billing_last_name']) );
     }
+  
 }
 
 
@@ -730,11 +728,10 @@ add_action('payment_block', 'woocommerce_checkout_payment', 20);
 
 
 add_action("template_redirect", 'redirection_function');
-function redirection_function()
-{
+function redirection_function(){
     global $woocommerce;
-    if (is_cart() && WC()->cart->cart_contents_count == 0) {
-        wp_safe_redirect(get_permalink(woocommerce_get_page_id('shop')));
+    if( is_cart() && WC()->cart->cart_contents_count == 0){
+        wp_safe_redirect( get_permalink( woocommerce_get_page_id( 'shop' ) ) );
     }
 }
 
@@ -815,10 +812,10 @@ function yourdomain_save_post($post_id)
 
 
     $data['ID'] = $post_id;
-    $data['post_title'] = $post_id . ' רישום אחריות ' . ', ' . $first_name . ' ' . $last_name . ', ' . $phone;
-    $data['post_name'] = sanitize_title($post_id);
+	$data['post_title'] = $post_id . ' רישום אחריות ' . ', ' . $first_name . ' ' . $last_name . ', ' . $phone;
+	$data['post_name'] = sanitize_title( $post_id );
 
-    wp_update_post($data);
+	wp_update_post( $data );
 }
 
 
@@ -898,12 +895,12 @@ function yourdomain_call_save_post($post_id)
 
     wp_mail($toEmail, $subject, $message, $from, $attachments);
 
-
+    
     $data['ID'] = $post_id;
-    $data['post_title'] = $post_id . ' קריאת שירות ' . ', ' . $first_name . ' ' . $last_name . ', ' . $phone;
-    $data['post_name'] = sanitize_title($post_id);
+	$data['post_title'] = $post_id . ' קריאת שירות ' . ', ' . $first_name . ' ' . $last_name . ', ' . $phone;
+	$data['post_name'] = sanitize_title( $post_id );
 
-    wp_update_post($data);
+    wp_update_post( $data );
 }
 
 
@@ -941,8 +938,7 @@ function admin_order_display_delivery_order_id($order)
 
 
 
-function camptown_order_send($order_id)
-{
+function camptown_order_send($order_id) {
 
     $order = wc_get_order($order_id);
 
@@ -975,9 +971,9 @@ function camptown_order_send($order_id)
         $shipping_method = '';
         foreach ($delivery_methods_info as $key => $delivery_info) {
             if ($key == $item->get_product_id()) {
-                $shipping_id = $delivery_info['id'];
-                $shipping_cost = $delivery_info['cost'];
-                $shipping_method = $delivery_info['del_name'];
+               $shipping_id = $delivery_info['id'];
+               $shipping_cost = $delivery_info['cost'];
+               $shipping_method = $delivery_info['del_name'];
             }
         }
 
@@ -1265,9 +1261,8 @@ add_action('wp_footer', function () {
 });
 
 // Add third address field
-add_filter('woocommerce_checkout_fields', 'custom_address_field');
-function custom_address_field($fields)
-{
+add_filter('woocommerce_checkout_fields' , 'custom_address_field');
+function custom_address_field( $fields ) {
     $fields['shipping']['shipping_address_3'] = array(
         'placeholder'   => _x('דירה', 'placeholder', 'woocommerce'),
         'label'     => __('', 'woocommerce'),
@@ -1287,18 +1282,16 @@ function custom_address_field($fields)
     return $fields;
 }
 add_action('woocommerce_checkout_update_order_meta', 'custom_address_field_update_order_meta');
-function custom_address_field_update_order_meta($order_id)
-{
+function custom_address_field_update_order_meta($order_id) {
     if (!empty($_POST['shipping_address_3'])) {
-        update_post_meta($order_id, 'shipping_address_3', sanitize_text_field($_POST['shipping_address_3']));
+        update_post_meta($order_id, 'shipping_address_3', sanitize_text_field( $_POST['shipping_address_3']));
     }
     if (!empty($_POST['billing_address_3'])) {
-        update_post_meta($order_id, 'billing_address_3', sanitize_text_field($_POST['billing_address_3']));
+        update_post_meta($order_id, 'billing_address_3', sanitize_text_field( $_POST['billing_address_3']));
     }
 }
 add_filter('woocommerce_default_address_fields', 'woo_new_default_address_fields');
-function woo_new_default_address_fields($fields)
-{
+function woo_new_default_address_fields($fields) {
     $fields['address_3'] = array(
         'label' => __('דירה', 'woocommerce'),
         'class' => array('form-row-wide'),
@@ -1306,8 +1299,7 @@ function woo_new_default_address_fields($fields)
     return $fields;
 }
 add_filter('woocommerce_order_formatted_billing_address', 'woo_custom_order_formatted_billing_address', 10, 2);
-function woo_custom_order_formatted_billing_address($address, $WC_Order)
-{
+function woo_custom_order_formatted_billing_address($address, $WC_Order) {
     $address = array(
         'first_name'    => $WC_Order->billing_first_name,
         'last_name'     => $WC_Order->billing_last_name,
@@ -1325,8 +1317,7 @@ function woo_custom_order_formatted_billing_address($address, $WC_Order)
     return $address;
 }
 add_filter('woocommerce_order_formatted_shipping_address', 'woo_custom_order_formatted_shipping_address', 10, 2);
-function woo_custom_order_formatted_shipping_address($address, $WC_Order)
-{
+function woo_custom_order_formatted_shipping_address($address, $WC_Order) {
     $address = array(
         'first_name'    => $WC_Order->shipping_first_name,
         'last_name'     => $WC_Order->shipping_last_name,
@@ -1343,13 +1334,12 @@ function woo_custom_order_formatted_shipping_address($address, $WC_Order)
     );
     return $address;
 }
-add_filter('woocommerce_formatted_address_replacements', function ($replacements, $args) {
+add_filter('woocommerce_formatted_address_replacements', function($replacements, $args) {
     $replacements['{address_3}'] = $args['address_3'];
     return $replacements;
 }, 10, 2);
 add_filter('woocommerce_localisation_address_formats', 'woo_includes_address_formats', 10, 1);
-function woo_includes_address_formats($address_formats)
-{
+function woo_includes_address_formats($address_formats) {
     $address_formats['default'] = "{name}\n{company}\n{address_1}\n{address_2}\n{address_3}\n{city}\n{state}";
     return $address_formats;
 }
