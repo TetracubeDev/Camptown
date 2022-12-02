@@ -1,5 +1,4 @@
 <?php
-//add_filter('show_admin_bar', '__return_false'); // Відключити адмінпанель
 function enqueue_custom_style()
 {
     wp_enqueue_style('bootstrap_reboot_css', get_template_directory_uri() . '/css/bootstrap-reboot.css');
@@ -19,9 +18,7 @@ add_action('wp_enqueue_scripts', 'enqueue_custom_style');
 
 function enqueue_custom_script()
 {
-//    wp_deregister_script('jquery');
-//    wp_register_script('jquery', get_template_directory_uri() . '/js/jquery.js');
-//    wp_enqueue_script('jquery');
+
 
 
     wp_enqueue_script('jcfilter', get_template_directory_uri() . '/js/jcfilter.js', array('jquery'), true);
