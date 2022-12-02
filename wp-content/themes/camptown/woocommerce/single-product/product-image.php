@@ -24,26 +24,34 @@ if (!function_exists('wc_get_gallery_image_html')) {
 }
 
 global $product;
+$slider_rtl         = ( is_rtl() ) ? 'true' : 'false';
+$wrapper_classes = apply_filters( 'woocommerce_single_product_image_gallery_classes', array(
+    'woo-product-gallery-slider',
+    'woocommerce-product-gallery',
+    'wpgs--' . ( has_post_thumbnail() ? 'with-images' : 'without-images' ),
+    'images',
 
+) );
 
 ?>
+<div class="<?php echo esc_attr( implode( ' ', array_map( 'sanitize_html_class', $wrapper_classes ) ) ); ?>" <?php echo esc_attr( $slider_rtl == 'true' ? 'dir=rtl' : '' ); ?> >
+    <div class="product-slider">
+        <div class="product-slider__inner" onmousemove="zoom(event)" style="background-image: url('<?php echo wp_get_attachment_url($product->get_image_id()); ?>')">
+            <div class="woocommerce-product-gallery__image product-slider__image">
+                <img src="<?php echo wp_get_attachment_url($product->get_image_id()); ?>" alt="<?php the_title(); ?>">
+            </div>
+        </div>
 
-<div class="product-slider">
-	<div class="product-slider__inner" onmousemove="zoom(event)" style="background-image: url('<?php echo wp_get_attachment_url($product->get_image_id()); ?>')">
-		<div class="product-slider__image">
-			<img src="<?php echo wp_get_attachment_url($product->get_image_id()); ?>" alt="<?php the_title(); ?>">
-		</div>
-	</div>
-
-	<?php
-	$attachment_ids = $product->get_gallery_image_ids();
-	foreach ($attachment_ids as $attachment_id) { ?>
-		<div class="product-slider__inner" onmousemove="zoom(event)" style="background-image: url('<?php echo $image_link = wp_get_attachment_url($attachment_id); ?>')">
-			<div class="product-slider__image">
-				<img src="<?php echo $image_link = wp_get_attachment_url($attachment_id); ?>" alt="<?php the_title(); ?>">
-			</div>
-		</div>
-	<?php } ?>
+        <?php
+        $attachment_ids = $product->get_gallery_image_ids();
+        foreach ($attachment_ids as $attachment_id) { ?>
+            <div class="product-slider__inner" onmousemove="zoom(event)" style="background-image: url('<?php echo $image_link = wp_get_attachment_url($attachment_id); ?>')">
+                <div class="product-slider__image woocommerce-product-gallery__image--placeholder">
+                    <img class="wp-post-image" src="<?php echo $image_link = wp_get_attachment_url($attachment_id); ?>" alt="<?php the_title(); ?>">
+                </div>
+            </div>
+        <?php } ?>
+    </div>
 </div>
 
 <script>
