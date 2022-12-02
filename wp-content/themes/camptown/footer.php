@@ -436,7 +436,30 @@
     });
 </script>
 
-<?php wp_footer(); ?>
+<?php
+
+//$path = __DIR__ . '/my-log25.log';
+//$file = file_get_contents($path);
+//foreach (json_decode($file)  as $f){
+//    if ($f) {
+//
+//        $url = 'https://ws.admonis.com/api/feedback';
+//        $ch = curl_init($url);
+//        curl_setopt($ch, CURLOPT_POST, 1);
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, $f);
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//        $result = curl_exec($ch);
+//
+//        error_log(print_r($result, true), 3, __DIR__ . '/  ');
+//        error_log(print_r($f, true), 3, __DIR__ . '/my-log999.log');
+//
+//        curl_close($ch);
+//        file_put_contents($path, $result);
+//    }
+//}
+
+wp_footer(); ?>
 </body>
 
 </html>
