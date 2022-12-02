@@ -479,7 +479,7 @@ function my_woocommerce_ajax_update_cart()
 
 
 
-// My Account 
+// My Account
 
 
 add_filter( 'woocommerce_account_menu_items', function($items) {
@@ -660,33 +660,33 @@ function override_default_address_checkout_fields($address_fields)
  * @compatible    WC 3.9
  * @donate $9     https://businessbloomer.com/bloomer-armada/
  */
-  
+
 ///////////////////////////////
 // 1. ADD FIELDS
-  
+
 add_action( 'woocommerce_register_form_start', 'bbloomer_add_name_woo_account_registration' );
-  
+
 function bbloomer_add_name_woo_account_registration() {
     ?>
-  
+
     <p class="form-row form-row-first">
         <input type="text" placeholder="* <?php _e( 'First name', 'woocommerce' ); ?>" class="input-text" name="billing_first_name" id="reg_billing_first_name" value="<?php if ( ! empty( $_POST['billing_first_name'] ) ) esc_attr_e( $_POST['billing_first_name'] ); ?>" />
     </p>
-  
+
     <p class="form-row form-row-last">
         <input type="text" placeholder="* <?php _e( 'Last name', 'woocommerce' ); ?>" class="input-text" name="billing_last_name" id="reg_billing_last_name" value="<?php if ( ! empty( $_POST['billing_last_name'] ) ) esc_attr_e( $_POST['billing_last_name'] ); ?>" />
     </p>
-  
+
     <div class="clear"></div>
-  
+
     <?php
 }
-  
+
 ///////////////////////////////
 // 2. VALIDATE FIELDS
-  
+
 add_filter( 'woocommerce_registration_errors', 'bbloomer_validate_name_fields', 10, 3 );
-  
+
 function bbloomer_validate_name_fields( $errors, $username, $email ) {
     if ( isset( $_POST['billing_first_name'] ) && empty( $_POST['billing_first_name'] ) ) {
         $errors->add( 'billing_first_name_error', __( '<strong>Error</strong>: First name is required!', 'woocommerce' ) );
@@ -696,12 +696,12 @@ function bbloomer_validate_name_fields( $errors, $username, $email ) {
     }
     return $errors;
 }
-  
+
 ///////////////////////////////
 // 3. SAVE FIELDS
-  
+
 add_action( 'woocommerce_created_customer', 'bbloomer_save_name_fields' );
-  
+
 function bbloomer_save_name_fields( $customer_id ) {
     if ( isset( $_POST['billing_first_name'] ) ) {
         update_user_meta( $customer_id, 'billing_first_name', sanitize_text_field( $_POST['billing_first_name'] ) );
@@ -713,7 +713,7 @@ function bbloomer_save_name_fields( $customer_id ) {
         update_user_meta( $customer_id, 'shipping_last_name', sanitize_text_field( $_POST['billing_last_name'] ) );
         update_user_meta( $customer_id, 'last_name', sanitize_text_field($_POST['billing_last_name']) );
     }
-  
+
 }
 
 
@@ -895,7 +895,7 @@ function yourdomain_call_save_post($post_id)
 
     wp_mail($toEmail, $subject, $message, $from, $attachments);
 
-    
+
     $data['ID'] = $post_id;
 	$data['post_title'] = $post_id . ' קריאת שירות ' . ', ' . $first_name . ' ' . $last_name . ', ' . $phone;
 	$data['post_name'] = sanitize_title( $post_id );
@@ -914,7 +914,6 @@ add_action('woocommerce_checkout_update_order_meta', function ($order_id, $poste
 
     $str = $_POST['shipping_method_description-value'];
     $replaced_str = str_replace(['\\'], '', $_POST['shipping_method_description-id']);
-
 
 
     $order = new WC_Order($order_id);
@@ -1022,7 +1021,34 @@ function camptown_order_send($order_id) {
             'Canceled' => $order_cancelled,
             'CanceledDate' => $order_cancelled_date,
         );
+
     }
+
+    //$order_items_first = $order->update_meta_data('order_items_first', $order_items);
+    $order_items_first = $order->get_meta('order_items_first');
+    if(!empty($order_items_first)) {
+        if($order->get_status() == 'on-hold') {
+            $product_new = [];
+            foreach ($order_items as $order_item) {
+                array_push($product_new, $order_item['ItemID']);
+            }
+            foreach ($order_items_first as $item) {
+                if(!in_array($item['ItemID'], $product_new)) {
+                    $item['Canceled'] = (int)1;
+                    $item['CanceledDate'] = date('Y-m-d') . 'T' . date('H:i:s') . '.342Z';
+                    array_push($order_items, $item);
+                }
+            }
+            $order->update_meta_data('order_items_first', $order_items);
+            $order->save();
+            //var_dump($order_items);
+            //die();
+        }
+    } else {
+        $order->update_meta_data('order_items_first', $order_items);
+        $order->save();
+    }
+
 
     $orders[] = array(
         'CustomerID' => get_field('customer_id_number', 'option'),
@@ -1046,7 +1072,6 @@ function camptown_order_send($order_id) {
         'orders' => $orders
     );
 
-
     $url = 'https://ws.admonis.com/api/PushPlatformsOrders';
     $ch = curl_init($url);
 
@@ -1064,6 +1089,26 @@ function camptown_order_send($order_id) {
 }
 add_action('woocommerce_thankyou', 'camptown_order_send');
 add_action('woocommerce_order_status_cancelled', 'camptown_order_send', 10, 1);
+add_action( 'woocommerce_order_status_on-hold_to_processing_notification', 'camptown_order_send', 10, 1);
+
+
+// run a function when the WooCommerce order is updated/*
+
+add_action( 'edit_post_shop_order', 'edit_post_shop_order_callback', 99, 2 );
+function edit_post_shop_order_callback( $post_ID, $post ) {
+
+
+    $order = wc_get_order( $post_ID );
+
+/*
+    $order_status = $order->get_status();
+    $billing_first_name = $order->get_billing_first_name();
+*/
+	
+    camptown_order_send($post_ID);
+
+}
+
 
 add_action('wp_ajax_nopriv_delete_post', 'delete_post_callback');
 add_action('wp_ajax_delete_post', 'delete_post_callback');
@@ -1176,8 +1221,6 @@ function wpai_wp_all_import_minimum_number_of_variations($min_number_of_variatio
     return 1;
 }
 
-
-
 add_action('wp_ajax_woo_get_ajax_data', 'woo_get_ajax_data');
 add_action('wp_ajax_nopriv_woo_get_ajax_data', 'woo_get_ajax_data');
 function woo_get_ajax_data()
@@ -1246,8 +1289,6 @@ add_action('wp_footer', function () {
                             console.log(error);
                         }
                     });
-
-
                 }
 
                 calcTotal();
@@ -1343,3 +1384,106 @@ function woo_includes_address_formats($address_formats) {
     $address_formats['default'] = "{name}\n{company}\n{address_1}\n{address_2}\n{address_3}\n{city}\n{state}";
     return $address_formats;
 }
+/*
+function my_saved_post($post_id, $xml_node, $is_update) {
+    $path = wp_get_upload_dir();
+    $path = $path['basedir'] . '/wpallimport/admonis.json';
+    $file = file_get_contents($path);
+
+    if ($file !== false) {
+        $file = json_decode($file, true);
+        if ($file == null) {
+            $file = [];
+        }
+        $data = [
+            "username" => "Camptown268",
+            "password" => "Camptown862",
+            //"productid" => strval($post_id),
+            "productid" => get_field('product_id', $post_id),
+            "success" => "true",
+            "desc" => get_permalink($post_id)
+        ];
+        array_push($file, $data);
+        $file = json_encode($file);
+        file_put_contents($path, $file);
+
+//        $LogPath = __DIR__ . '/logTest.log';
+//        $LogFile = file_get_contents($LogPath);
+//        $url = 'https://ws.admonis.com/api/feedback';
+//        $ch = curl_init($url);
+//        curl_setopt($ch, CURLOPT_POST, 1);
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//        $LogResult = curl_exec($ch);
+//        array_push($LogFile, $LogResult);
+//        array_push($LogFile, $data);
+//        $LogResult = json_encode($LogFile);
+//        file_put_contents($LogFile, $LogResult);
+    }
+}
+add_action('pmxi_saved_post', 'my_saved_post', 10, 3);
+*/
+
+
+
+
+
+function my_saved_post($post_id, $xml_node, $is_update) {
+    global $woocommerce;
+    $_product = wc_get_product($post_id);
+    if ($_product->get_variation_id()) {
+        $variation = wc_get_product($_product->get_variation_id());
+    }
+    if ($_product) {
+        $product_id = ($_product->get_variation_id()) ? get_post_meta($variation->get_variation_id(), 'product_id', true) : get_field('product_id', $item->get_product_id());
+        $data = [
+            "username" => "Camptown268",
+            "password" => "Camptown862",
+            "productid" => strval($product_id),
+            "success" => "true",
+            "desc" => get_permalink($post_id)
+        ];
+        $data = json_encode($data);
+        $url = 'https://ws.admonis.com/api/feedback';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+
+        error_log(print_r($result, true), 3, __DIR__ . '/my-log.log');
+        error_log(print_r($data, true), 3, __DIR__ . '/my-log.log');
+
+        curl_close($ch);
+    }
+}
+add_action('pmxi_saved_post', 'my_saved_post', 10, 3);
+
+/*
+
+function after_xml_import($import_id, $import) {
+    $path = wp_get_upload_dir();
+    $path = $path['basedir'] . '/wpallimport/admonis.json';
+    $file = file_get_contents($path);
+    if ($file) {
+        $url = 'https://ws.admonis.com/api/feedback';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $file);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+
+        error_log(print_r($result, true), 3, __DIR__ . '/  ');
+        error_log(print_r($file, true), 3, __DIR__ . '/my-log.log');
+
+        curl_close($ch);
+        file_put_contents($path, '');
+    }
+}
+add_action('pmxi_after_xml_import', 'after_xml_import', 10, 2);
+
+
+*/
