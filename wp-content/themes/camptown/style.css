@@ -1943,9 +1943,6 @@ margin-left: 0;
     }
 }
 
-option:first-child {
-    display: none;
-}
 
 .image-section {
     text-align: right;
@@ -9626,9 +9623,13 @@ display: none;
 
 .single-product__price {
     font-size: 20px;
-    margin-bottom: 27px;
 }
-
+.finalVarPrice{
+	margin-bottom: 27px;
+}
+.single_variation_wrap .woocommerce-variation-price {
+    display: none;
+}
 .single-product__price .amount {
     font-weight: bold;
 }
@@ -9772,10 +9773,6 @@ del {
     padding-top: 5px;
     padding-bottom: 5px;
     line-height: 1.2;
-}
-
-.reset_variations {
-    display: none !important;
 }
 
 .single-product__add .variations th,

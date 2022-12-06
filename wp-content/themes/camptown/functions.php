@@ -1,4 +1,5 @@
 <?php
+//add_filter('show_admin_bar', '__return_false'); // Відключити адмінпанель
 function enqueue_custom_style()
 {
     wp_enqueue_style('bootstrap_reboot_css', get_template_directory_uri() . '/css/bootstrap-reboot.css');
@@ -18,7 +19,9 @@ add_action('wp_enqueue_scripts', 'enqueue_custom_style');
 
 function enqueue_custom_script()
 {
-
+//    wp_deregister_script('jquery');
+//    wp_register_script('jquery', get_template_directory_uri() . '/js/jquery.js');
+//    wp_enqueue_script('jquery');
 
 
     wp_enqueue_script('jcfilter', get_template_directory_uri() . '/js/jcfilter.js', array('jquery'), true);
@@ -27,7 +30,7 @@ function enqueue_custom_script()
     wp_enqueue_script('uikit_js', get_template_directory_uri() . '/js/uikit.min.js', array('jquery'), true);
     wp_enqueue_script('aos_js', get_template_directory_uri() . '/js/aos.js', array('jquery'), true);
     wp_enqueue_script('fancybox_js', get_template_directory_uri() . '/js/jquery.fancybox.min.js', array('jquery'), true);
-    wp_enqueue_script('nice-select_js', get_template_directory_uri() . '/js/jquery.nice-select.js', array('jquery'), true);
+ //   wp_enqueue_script('nice-select_js', get_template_directory_uri() . '/js/jquery.nice-select.js', array('jquery'), true);
 
     if ( is_home() ) {
         wp_enqueue_script('loadmore_js', get_template_directory_uri() . '/js/myloadmore.js', array('jquery'), true);
@@ -1106,7 +1109,6 @@ function edit_post_shop_order_callback( $post_ID, $post ) {
 
 }
 
-
 add_action('wp_ajax_nopriv_delete_post', 'delete_post_callback');
 add_action('wp_ajax_delete_post', 'delete_post_callback');
 function delete_post_callback()
@@ -1176,37 +1178,137 @@ add_action('woocommerce_save_product_variation', function ($variation_id, $i = -
     }
 }, 10, 2);
 
-function pmxi_edit_attrs($post_id, $xml_node, $is_update)
-{
-    $import_id = wp_all_import_get_import_id();
-    $prod = wc_get_product($post_id);
-    if ($import_id == '1' && $prod->is_type('variable')) {
-        $record = json_decode(json_encode((array)$xml_node), 1);
+/**
+ * Create a variable product on woocommerce
+ * @return int Product ID
+ */
+function pricode_create_product(){
+    $product = new WC_Product_Variable();
+    $product->set_description('T-shirt variable description');
+    $product->set_name('T-shirt variable');
+    $product->set_sku('test-shirt');
+    $product->set_price(1);
+    $product->set_regular_price(1);
+    $product->set_stock_status();
+    $product->save();
+    return $product;
+}
 
-        $product_attributes = get_post_meta($post_id, '_product_attributes', true);
-        if ($product_attributes['temporary-name'] && $record['Options']['Option']['Title']) {
-            $new_value = $record['Options']['Option']['Title'];
-            $new_key = sanitize_title($new_value);
+/**
+ * Create Product Attributes 
+ * @param  string $name    Attribute name
+ * @param  array $options Options values
+ * @return Object          WC_Product_Attribute 
+ */
+function pricode_create_attributes( $name, $options ){
+    $attribute = new WC_Product_Attribute();
+    $attribute->set_id(0);
+    $attribute->set_name($name);
+    $attribute->set_options($options);
+    $attribute->set_visible(true);
+    $attribute->set_variation(true);
+    return $attribute;
+}
 
-
-            $product_attributes[$new_key] = $product_attributes['temporary-name'];
-            unset($product_attributes['temporary-name']);
-            $product_attributes[$new_key]['name'] = $new_value;
+/**
+ * [pricode_create_variations description]
+ * @param  [type] $product_id [description]
+ * @param  [type] $values     [description]
+ * @return [type]             [description]
+ */
+function pricode_create_variations($product_id, $values, $data){
+    $variation = new WC_Product_Variation();
+    $variation->set_parent_id($product_id);
+    $variation->set_attributes($values);
+    $variation->set_status('publish');
+    $variation->set_sku($data['sku']);
+    $variation->set_price($data['price']);
+    $variation->set_regular_price($data['price']);
+    $variation->set_stock_status($data['stock']);
+    $variation->save();
+    $product = wc_get_product($product_id);
+    $product->save();
+    update_post_meta($variation->get_variation_id(), '_model', $data['model']);
+    if (!empty($data['image'])) {
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+        add_filter('https_ssl_verify', '__return_false'); // for old Let`s Encrypt
+        $image_id = media_sideload_image($data['image'] . '&ext=.png', $product_id, null, 'id');
+        if (!is_wp_error($image_id)) {
+            set_post_thumbnail($variation->get_variation_id(), $image_id);
         }
-        update_post_meta($post_id, '_product_attributes', $product_attributes);
+    }
+}
 
-        global $wpdb;
-        $result = $wpdb->query("update wp_postmeta set meta_key = 'attribute_" . $new_key . "' where meta_key = 'attribute_temporary-name'");
 
-        if ($prod->get_children()) {
-            foreach ($prod->get_children() as $key => $variation_id) {
-                if ($record['Options']['Option']['OptionItem'][$key]['ID']) {
-                    update_post_meta($variation_id, '_product_id', $record['Options']['Option']['OptionItem'][$key]['ID']);
-                }
-                if ($record['Options']['Option']['OptionItem'][$key]['Model']) {
-                    update_post_meta($variation_id, '_model', $record['Options']['Option']['OptionItem'][$key]['Model']);
+function pmxi_edit_attrs($post_id, $xml_node, $is_update) {
+    $product = wc_get_product($post_id);
+    $temp_variations = $product->get_children();
+    if ($product->is_type('variable')) {
+        $xml_node = json_decode(json_encode((array)$xml_node), 1);
+		error_log(print_r($xml_node, true), 3, __DIR__ . '/xml-log.log');
+        if (isset($xml_node['Options']['Option']['Option'])) {
+            $parent_option_title = $xml_node['Options']['Option']['Title'];
+            $attributes = [];
+            $variations = [];
+            foreach ($xml_node['Options']['Option']['Option'] as $Option_child) {
+                $attributes[wc_sanitize_taxonomy_name(stripslashes($parent_option_title))][] = wc_sanitize_taxonomy_name(stripslashes($Option_child['Name']));
+                foreach ($Option_child['OptionItem'] as $OptionItem) {
+                    $attributes[wc_sanitize_taxonomy_name(stripslashes($Option_child['Title']))][] = wc_sanitize_taxonomy_name(stripslashes($OptionItem['Name']));
+                    $price = $OptionItem['Price_Publish'];
+			    	$price += $xml_node['Price_Publish'];
+                    $stock = ($OptionItem['InStock'] == '1') ? 'instock' : 'outofstock';
+                    $variations[] = [
+                        'attrs' => [
+                            wc_sanitize_taxonomy_name(stripslashes($parent_option_title)) => wc_sanitize_taxonomy_name(stripslashes($Option_child['Name'])),
+                            wc_sanitize_taxonomy_name(stripslashes($Option_child['Title'])) => wc_sanitize_taxonomy_name(stripslashes($OptionItem['Name']))
+                        ],
+                        'data' => [
+                            'sku' => $OptionItem['Makat'],
+                            'price' => $price,
+                            'stock' => $OptionItem['InStock'],
+                            'image' => $OptionItem['Picture'],
+                            'model' => $OptionItem['Model'],
+                        ]
+                    ];
                 }
             }
+        } else {
+            $option_title = $xml_node['Options']['Option']['Title'];
+            $attributes = [];
+            $variations = [];
+            foreach ($xml_node['Options']['Option']['OptionItem'] as $OptionItem) {
+                $attributes[wc_sanitize_taxonomy_name(stripslashes($option_title))][] = wc_sanitize_taxonomy_name(stripslashes($OptionItem['Name']));
+                $price = $OptionItem['Price_Publish'];
+				$price += $xml_node['Price_Publish'];
+                $stock = ($OptionItem['InStock'] == '1') ? 'instock' : 'outofstock';
+                $variations[] = [
+                    'attrs' => [
+                        wc_sanitize_taxonomy_name(stripslashes($option_title)) => wc_sanitize_taxonomy_name(stripslashes($OptionItem['Name'])),
+                    ],
+                    'data' => [
+                        'sku' => $OptionItem['Makat'],
+                        'price' => $price,
+                        'stock' => $OptionItem['InStock'],
+                        'image' => $OptionItem['Picture'],
+                        'model' => $OptionItem['Model'],
+                    ]
+                ];
+            }
+        }
+        $set_attributes = [];
+        foreach ($attributes as $key => $value) {
+            $set_attributes[] = pricode_create_attributes($key, $value);
+            $product->set_attributes($set_attributes);
+            $product->save();
+        }
+        foreach ($variations as $key => $value) {
+            pricode_create_variations($product->get_id(), $value['attrs'], $value['data']);
+        }
+        foreach ($temp_variations as $temp_variation) {
+            $temp_variation = wc_get_product($temp_variation);
+            $temp_variation->delete(true);
         }
     }
 }
@@ -1456,7 +1558,7 @@ function my_saved_post($post_id, $xml_node, $is_update) {
         curl_close($ch);
     }
 }
-add_action('pmxi_saved_post', 'my_saved_post', 10, 3);
+//add_action('pmxi_saved_post', 'my_saved_post', 10, 3);
 
 /*
 
@@ -1484,3 +1586,37 @@ add_action('pmxi_after_xml_import', 'after_xml_import', 10, 2);
 
 
 */
+
+/**
+* @snippet       Replace Variable Price With Variation Price | WooCommerce
+* @how-to        Get CustomizeWoo.com FREE
+* @author        Rodolfo Melogli
+* @testedwith    WooCommerce 6
+* @donate $9     https://businessbloomer.com/bloomer-armada/
+*/
+ 
+add_action( 'woocommerce_variable_add_to_cart', 'bbloomer_update_price_with_variation_price' );
+  
+function bbloomer_update_price_with_variation_price() {
+   global $product;
+   $price = $product->get_price_html();
+   wc_enqueue_js( "      
+      $(document).on('found_variation', 'form.cart', function( event, variation ) {   
+         if(variation.price_html) $('.single-product__price > p.price').html(variation.price_html);
+         $('.woocommerce-variation-price').hide();
+      });
+      $(document).on('hide_variation', 'form.cart', function( event, variation ) {   
+         $('.single-product__price > p.price').html('" . $price . "');
+      });
+   " );
+}
+
+add_filter( 'woocommerce_attribute_label', 'custom_attribute_label', 10, 3 );
+function custom_attribute_label( $label, $name, $product ) {
+    if( $name == 'color' && is_product() ) {
+        $label = __('צבע', 'woocommerce');
+    } elseif( $name == 'size' && is_product() ) {
+        $label = __('מידה', 'woocommerce');
+	}
+    return $label;
+}
