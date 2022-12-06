@@ -113,7 +113,7 @@ global $product;
 				<?php } ?>
 
 
-				<?php if (get_field('description_2')) { ?>
+				<?php if (get_field('description')) { ?>
 					<div class="single-product__description">
 						<div class="single-product__description-title">
 
@@ -121,7 +121,7 @@ global $product;
 						</div>
 						<div class="single-product__hidden">
 							<div class="default-content">
-								<?php the_field('description_2'); ?>
+								<?php the_field('description'); ?>
 							</div>
 						</div>
 					</div>
@@ -222,6 +222,7 @@ global $product;
 			document.execCommand("copy");
 			$temp.remove();
 		});
+		
 	});
 </script>
 <?php do_action('woocommerce_after_single_product'); ?>

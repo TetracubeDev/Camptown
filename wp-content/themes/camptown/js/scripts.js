@@ -458,7 +458,7 @@ jQuery(document).ready(function ($) {
     });
 
 
-    $('select').not('#billing_city, #shipping_city').niceSelect();
+    //$('select').not('#billing_city, #shipping_city').niceSelect();
 
     if ($('.product-slider .slick-dots li').length == 1) {
         $('.product-slider .slick-dots').hide()
