@@ -113,7 +113,7 @@ global $product;
 				<?php } ?>
 
 
-				<?php if (get_field('description')) { ?>
+				<?php /*if (get_field('description')) { ?>
 					<div class="single-product__description">
 						<div class="single-product__description-title">
 
@@ -125,7 +125,7 @@ global $product;
 							</div>
 						</div>
 					</div>
-				<?php } ?>
+				<?php } */?>
 
 				<div class="single-product__botton-buttons">
 					<?php if (get_field('file')) { ?>
