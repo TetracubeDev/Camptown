@@ -30,7 +30,7 @@ function enqueue_custom_script()
     wp_enqueue_script('uikit_js', get_template_directory_uri() . '/js/uikit.min.js', array('jquery'), true);
     wp_enqueue_script('aos_js', get_template_directory_uri() . '/js/aos.js', array('jquery'), true);
     wp_enqueue_script('fancybox_js', get_template_directory_uri() . '/js/jquery.fancybox.min.js', array('jquery'), true);
- //   wp_enqueue_script('nice-select_js', get_template_directory_uri() . '/js/jquery.nice-select.js', array('jquery'), true);
+    wp_enqueue_script('nice-select_js', get_template_directory_uri() . '/js/jquery.nice-select.js', array('jquery'), true);
 
     if ( is_home() ) {
         wp_enqueue_script('loadmore_js', get_template_directory_uri() . '/js/myloadmore.js', array('jquery'), true);
@@ -1247,7 +1247,7 @@ function pmxi_edit_attrs($post_id, $xml_node, $is_update) {
     $temp_variations = $product->get_children();
     if ($product->is_type('variable')) {
         $xml_node = json_decode(json_encode((array)$xml_node), 1);
-		error_log(print_r($xml_node, true), 3, __DIR__ . '/xml-log.log');
+		//error_log(print_r($xml_node, true), 3, __DIR__ . '/xml-log.log');
         if (isset($xml_node['Options']['Option']['Option'])) {
             $parent_option_title = $xml_node['Options']['Option']['Title'];
             $attributes = [];
@@ -1275,6 +1275,8 @@ function pmxi_edit_attrs($post_id, $xml_node, $is_update) {
                 }
             }
         } else {
+		//error_log(print_r($xml_node['Options']['Option']['OptionItem'], true), 3, __DIR__ . '/xml-log-ONE.log');
+			
             $option_title = $xml_node['Options']['Option']['Title'];
             $attributes = [];
             $variations = [];
@@ -1310,9 +1312,54 @@ function pmxi_edit_attrs($post_id, $xml_node, $is_update) {
             $temp_variation = wc_get_product($temp_variation);
             $temp_variation->delete(true);
         }
+		
     }
+	
+$logDetailes = ''.$xml_node['PLATFORM_CATEGORY_ID'].'---';
+ error_log($logDetailes, 3, __DIR__ . '/xml-log-classification.log');
+$grillCat = ['676', '678','679', '629', '39', '164'];
+$campCat = ['אוהלים', 'מחצלות', 'ערסלים', 'קפה ובישול', 'שקי שינה / מזרני שטח', 'פנסים ותאורת חירום', 'שולחנות מתקפלים', 'כסאות מתקפלים', 'צידניות ומיכלי שתיה', 'שמשמיות', 'בקבוקי שתיה / תרמוס', 'ביגוד טרמי',];
+	if (in_array($xml_node['PLATFORM_CATEGORY_ID'], $grillCat)){
+          wp_set_object_terms($post_id, 'גרילים/מנגלים', 'custom-taxonomy-name');
+	} else {
+          wp_set_object_terms($post_id, 'קמפינג וטיולים', 'custom-taxonomy-name');
+	}
+	
 }
 add_action('pmxi_saved_post', 'pmxi_edit_attrs', 10, 3);
+function showProductCatTest(){
+    $product = get_product(10628);
+  $terms = get_the_terms( $product->get_id(), 'product_cat' );
+if($terms){
+	   foreach ( $terms as $term ) {
+      echo '<h1>'.$term->name.'</h1>';
+    }
+}
+	$grillCat = ['גריל גז', 'טאבון גז','גריל פחם'];
+	foreach($grillCat as $Gcat){
+echo $Gcat.'<br>';
+	}
+	
+
+//echo '<h1>'.$product->get_categories().'</h1>';
+
+}
+add_shortcode('PCAT', 'showProductCatTest');
+/*function MM_after_xml_import( $import_id, $import ) {
+$products = wc_get_products();
+$grillCat = ['גריל גז', 'טאבון גז','גריל פחם'];
+foreach($products as $product){
+	$productCut = get_the_terms( $product->get_id(), 'product_cat' );
+		foreach($productCut as $Pcat){
+			if (in_array($Pcat->name, $grillCat)){
+          wp_set_object_terms($post_id, 'test', 'custom-taxonomy-name');
+			}
+		}
+}		
+}
+add_action( 'pmxi_after_xml_import', 'MM_after_xml_import', 10, 2 );*/
+
+
 
 add_filter('wp_all_import_minimum_number_of_variations', 'wpai_wp_all_import_minimum_number_of_variations', 10, 3);
 function wpai_wp_all_import_minimum_number_of_variations($min_number_of_variations, $pid, $import_id)
@@ -1619,4 +1666,66 @@ function custom_attribute_label( $label, $name, $product ) {
         $label = __('מידה', 'woocommerce');
 	}
     return $label;
+}
+
+function meidmuz_custom_post_type() {
+ 
+		$taxomonylabels = array(
+			"name"          => __( 'Main Product Cat', 'textdomain' ),
+			"singular_name" => __( 'Cat', 'textdomain' ),
+		);
+
+		$taxomonyargs = array(
+			"label"              => __( 'Main Product Cat', 'textdomain' ),
+			"labels"             => $taxomonylabels,
+			"public"             => true,
+			"hierarchical"       => true,
+			"show_ui"            => true,
+			"show_in_menu"       => true,
+			"show_in_nav_menus"  => true,
+			"query_var"          => true,
+			"rewrite"            => array( 'slug' => 'best-brokers' ),
+			"show_admin_column"  => false,
+			"show_in_rest"       => false,
+			"rest_base"          => "",
+			"show_in_quick_edit" => false,
+		);
+
+        register_taxonomy( 'custom-taxonomy-name', array( 'product' ), $taxomonyargs );	
+	
+}
+add_action( 'init', 'meidmuz_custom_post_type' ); 
+
+add_action('acf/save_post', 'MM_send_email_on_acf_post');
+
+function MM_send_email_on_acf_post( $post_id ) {
+    
+    // bail early if not a contact_form post
+   /* if( get_post_type($post_id) !== 'warranty' || get_post_type($post_id) !== 'call_service' ) {
+        return;
+    }*/
+    // bail early if editing in admin
+    /*if( is_admin() ) {
+        return;
+    }*/
+    // vars
+    $post = get_post( $post_id );
+    
+    $link = get_the_permalink( $post_id );
+    // get custom fields (field group exists for content_form)
+    $name = get_field('first_name', $post_id).' '.get_field('last_name', $post_id);
+    $email = get_field('email', $post_id);
+    
+    
+    // email data
+    $to = 'meidanmuzrafi@gmail.com';
+	
+   // $headers = 'From: ' . $name . ' <' . $email . '>' . "\r\n";
+    $subject = $post->post_title;
+    $body = $name.'<br>'.$email.'<br><a href="'.esc_url($link).'">לפרטים נוספים לחץ כאן</a>';
+    
+    
+    // send email
+    wp_mail($to, $subject, $body );
+    
 }
